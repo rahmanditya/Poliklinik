@@ -1,0 +1,21 @@
+// vite.config.js
+import { defineConfig } from "file:///mnt/c/Docs/Frontend%20Projects/Poliklinik%20FE/Poliklinik/node_modules/vite/dist/node/index.js";
+import laravel from "file:///mnt/c/Docs/Frontend%20Projects/Poliklinik%20FE/Poliklinik/node_modules/laravel-vite-plugin/dist/index.js";
+var vite_config_default = defineConfig({
+  server: {
+    watch: {
+      usePolling: true,
+      interval: 100
+    }
+  },
+  plugins: [
+    laravel({
+      input: ["resources/css/app.css", "resources/js/app.js"],
+      refresh: true
+    })
+  ]
+});
+export {
+  vite_config_default as default
+};
+//# sourceMappingURL=data:application/json;base64,ewogICJ2ZXJzaW9uIjogMywKICAic291cmNlcyI6IFsidml0ZS5jb25maWcuanMiXSwKICAic291cmNlc0NvbnRlbnQiOiBbImNvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9kaXJuYW1lID0gXCIvbW50L2MvRG9jcy9Gcm9udGVuZCBQcm9qZWN0cy9Qb2xpa2xpbmlrIEZFL1BvbGlrbGluaWtcIjtjb25zdCBfX3ZpdGVfaW5qZWN0ZWRfb3JpZ2luYWxfZmlsZW5hbWUgPSBcIi9tbnQvYy9Eb2NzL0Zyb250ZW5kIFByb2plY3RzL1BvbGlrbGluaWsgRkUvUG9saWtsaW5pay92aXRlLmNvbmZpZy5qc1wiO2NvbnN0IF9fdml0ZV9pbmplY3RlZF9vcmlnaW5hbF9pbXBvcnRfbWV0YV91cmwgPSBcImZpbGU6Ly8vbW50L2MvRG9jcy9Gcm9udGVuZCUyMFByb2plY3RzL1BvbGlrbGluaWslMjBGRS9Qb2xpa2xpbmlrL3ZpdGUuY29uZmlnLmpzXCI7aW1wb3J0IHsgZGVmaW5lQ29uZmlnIH0gZnJvbSAndml0ZSc7XG5pbXBvcnQgbGFyYXZlbCBmcm9tICdsYXJhdmVsLXZpdGUtcGx1Z2luJztcblxuZXhwb3J0IGRlZmF1bHQgZGVmaW5lQ29uZmlnKHtzZXJ2ZXI6e1xuICAgIHdhdGNoOntcbiAgICAgICAgdXNlUG9sbGluZzogdHJ1ZSxcbiAgICAgICAgaW50ZXJ2YWw6IDEwMCxcbiAgICB9LFxufSxcbiAgICBwbHVnaW5zOiBbXG4gICAgICAgIGxhcmF2ZWwoe1xuICAgICAgICAgICAgaW5wdXQ6IFsncmVzb3VyY2VzL2Nzcy9hcHAuY3NzJywgJ3Jlc291cmNlcy9qcy9hcHAuanMnXSxcbiAgICAgICAgICAgIHJlZnJlc2g6IHRydWUsXG4gICAgICAgIH0pLFxuICAgIF0sXG59KTtcbiJdLAogICJtYXBwaW5ncyI6ICI7QUFBd1YsU0FBUyxvQkFBb0I7QUFDclgsT0FBTyxhQUFhO0FBRXBCLElBQU8sc0JBQVEsYUFBYTtBQUFBLEVBQUMsUUFBTztBQUFBLElBQ2hDLE9BQU07QUFBQSxNQUNGLFlBQVk7QUFBQSxNQUNaLFVBQVU7QUFBQSxJQUNkO0FBQUEsRUFDSjtBQUFBLEVBQ0ksU0FBUztBQUFBLElBQ0wsUUFBUTtBQUFBLE1BQ0osT0FBTyxDQUFDLHlCQUF5QixxQkFBcUI7QUFBQSxNQUN0RCxTQUFTO0FBQUEsSUFDYixDQUFDO0FBQUEsRUFDTDtBQUNKLENBQUM7IiwKICAibmFtZXMiOiBbXQp9Cg==
