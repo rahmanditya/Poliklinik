@@ -26,14 +26,14 @@ return new class extends Migration
             "role_code" => "admin",
             "role_name" => "Admin",
             "description" => "Admin"
-        ],
-        [
+        ]);
+        DB::table("roles")->insert([
             "id" => 2,
             "role_code" => "dokter",
             "role_name" => "Dokter",
             "description" => "Dokter"
-        ],
-        [
+        ]);
+        DB::table("roles")->insert([
             "id" => 3,
             "role_code" => "pasien",
             "role_name" => "Pasien",

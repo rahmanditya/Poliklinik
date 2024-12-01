@@ -26,32 +26,32 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
 
-    // Dokters
-    Route::get('/dokters', [DokterController::class, 'index'])->name('dokters.index');
-    Route::get('/dokters/create', [DokterController::class, 'create'])->name('dokters.create');
-    Route::post('/dokters', [DokterController::class, 'store'])->name('dokters.store');
-    Route::get('/dokters/{dokter}', [DokterController::class, 'show'])->name('dokters.show');
-    Route::get('/dokters/{dokter}/edit', [DokterController::class, 'edit'])->name('dokters.edit');
-    Route::put('/dokters/{dokter}', [DokterController::class, 'update'])->name('dokters.update');
-    Route::delete('/dokters/{dokter}', [DokterController::class, 'destroy'])->name('dokters.destroy');
+    // Dokter
+    Route::get('/dokter', [DokterController::class, 'index'])->name('dokter.index');
+    Route::get('/dokter/create', [DokterController::class, 'create'])->name('dokter.create');
+    Route::post('/dokter', [DokterController::class, 'store'])->name('dokter.store');
+    Route::get('/dokter/{dokter}', [DokterController::class, 'show'])->name('dokter.show');
+    Route::get('/dokter/{dokter}/edit', [DokterController::class, 'edit'])->name('dokter.edit');
+    Route::put('/dokter/{dokter}', [DokterController::class, 'update'])->name('dokter.update');
+    Route::delete('/dokter/{dokter}', [DokterController::class, 'destroy'])->name('dokter.destroy');
 
-    // Pasiens
-    Route::get('/pasiens', [PasienController::class, 'index'])->name('pasiens.index');
-    Route::get('/pasiens/create', [PasienController::class, 'create'])->name('pasiens.create');
-    Route::post('/pasiens', [PasienController::class, 'store'])->name('pasiens.store');
-    Route::get('/pasiens/{pasien}', [PasienController::class, 'show'])->name('pasiens.show');
-    Route::get('/pasiens/{pasien}/edit', [PasienController::class, 'edit'])->name('pasiens.edit');
-    Route::put('/pasiens/{pasien}', [PasienController::class, 'update'])->name('pasiens.update');
-    Route::delete('/pasiens/{pasien}', [PasienController::class, 'destroy'])->name('pasiens.destroy');
+    // Pasien
+    Route::get('/pasien', [PasienController::class, 'index'])->name('pasien.index');
+    Route::get('/pasien/create', [PasienController::class, 'create'])->name('pasien.create');
+    Route::post('/pasien', [PasienController::class, 'store'])->name('pasien.store');
+    Route::get('/pasien/{pasien}', [PasienController::class, 'show'])->name('pasien.show');
+    Route::get('/pasien/{pasien}/edit', [PasienController::class, 'edit'])->name('pasien.edit');
+    Route::put('/pasien/{pasien}', [PasienController::class, 'update'])->name('pasien.update');
+    Route::delete('/pasien/{pasien}', [PasienController::class, 'destroy'])->name('pasien.destroy');
 
-    // Polis
-    Route::get('/polis', [PoliController::class, 'index'])->name('polis.index');
-    Route::get('/polis/create', [PoliController::class, 'create'])->name('polis.create');
-    Route::post('/polis', [PoliController::class, 'store'])->name('polis.store');
-    Route::get('/polis/{poli}', [PoliController::class, 'show'])->name('polis.show');
-    Route::get('/polis/{poli}/edit', [PoliController::class, 'edit'])->name('polis.edit');
-    Route::put('/polis/{poli}', [PoliController::class, 'update'])->name('polis.update');
-    Route::delete('/polis/{poli}', [PoliController::class, 'destroy'])->name('polis.destroy');
+    // Poli
+    Route::get('/poli', [PoliController::class, 'index'])->name('poli.index');
+    Route::get('/poli/create', [PoliController::class, 'create'])->name('poli.create');
+    Route::post('/poli', [PoliController::class, 'store'])->name('poli.store');
+    Route::get('/poli/{poli}', [PoliController::class, 'show'])->name('poli.show');
+    Route::get('/poli/{poli}/edit', [PoliController::class, 'edit'])->name('poli.edit');
+    Route::put('/poli/{poli}', [PoliController::class, 'update'])->name('poli.update');
+    Route::delete('/poli/{poli}', [PoliController::class, 'destroy'])->name('poli.destroy');
 
     // Obats
     Route::get('/obats', [ObatController::class, 'index'])->name('obats.index');

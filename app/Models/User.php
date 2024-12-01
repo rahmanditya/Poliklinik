@@ -59,4 +59,8 @@ class User extends Authenticatable
         return $roles[$this->role_id] ?? 'unknown';
     }
 
+    public function pasien()
+    {
+        return $this->hasOne(Pasien::class, 'email', 'email'); // Matches User's email with Pasien's email
+    }
 }

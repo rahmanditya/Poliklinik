@@ -11,10 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('registrasi_pasien', function (Blueprint $table) {
+        Schema::create('schedules', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->foreignId('pasien_id')->constrained('users'); 
-            $table->foreignId('schedule_id')->constrained('schedules');
+            $table->foreignId('dokter_id')->constrained('dokters'); 
+            $table->date('date'); 
+            $table->time('start_time'); 
+            $table->time('end_time'); 
+            $table->integer('max_patients')->default(10); 
             $table->timestampsTz(0);
         });
     }
@@ -24,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('registrasi_pasien');
+        Schema::dropIfExists('schedules');
     }
 };

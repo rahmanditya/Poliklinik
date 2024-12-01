@@ -12,16 +12,21 @@ class Pasien extends Model
     protected $table = 'pasiens';
 
     protected $fillable = [
+        'medical_record_number',
         'name',
         'email',
         'phone',
-        'address',
-        'medical_record_number', // Assuming a unique identifier for patients
+        'date_of_birth',
+        'address', // Assuming a unique identifier for patients
     ];
 
-    // Relationships
-    public function poliVisits()
+    public function polis()
     {
-        return $this->hasMany(PoliVisit::class); // Assuming `poli_visits` tracks visits
+        return $this->hasMany(Poli::class);
+    }
+
+    public function user()
+    {
+        return $this->hasOne(User::class, 'email', 'email'); // Matches Pasien's email with User's email
     }
 }

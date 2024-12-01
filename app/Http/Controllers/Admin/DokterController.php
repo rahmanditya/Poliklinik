@@ -30,7 +30,7 @@ class DokterController extends Controller
         ]);
 
         Dokter::create($request->all());
-        return redirect()->route('dokters.index')->with('success', 'Dokter created successfully');
+        return redirect()->route('dokter.index')->with('success', 'Dokter created successfully');
     }
 
     // Display the specified resource
@@ -61,7 +61,7 @@ class DokterController extends Controller
 
         $dokter = Dokter::findOrFail($id);
         $dokter->update($request->all());
-        return redirect()->route('dokters.index')->with('success', 'Dokter updated successfully');
+        return redirect()->route('dokter.index')->with('success', 'Dokter updated successfully');
     }
 
     // Remove the specified resource from storage
@@ -69,6 +69,6 @@ class DokterController extends Controller
     {
         $dokter = Dokter::findOrFail($id);
         $dokter->delete();
-        return redirect()->route('dokters.index')->with('success', 'Dokter deleted successfully');
+        return redirect()->route('dokter.index')->with('success', 'Dokter deleted successfully');
     }
 }

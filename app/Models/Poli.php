@@ -12,19 +12,27 @@ class Poli extends Model
     protected $table = 'polis';
 
     protected $fillable = [
-        'name',
-        'location',
-        'description',
+        'pasien_id',
+        'dokter_id',
+        'schedule_id',
+        'poli',
+        'keluhan',
+        'status',
+        'nomor_antrian',
     ];
 
-    // Relationships
-    public function dokters()
+    public function pasien()
     {
-        return $this->hasMany(Dokter::class);
+        return $this->belongsTo(Pasien::class);
     }
 
-    public function poliVisits()
+    public function dokter()
     {
-        return $this->hasMany(PoliVisit::class);
+        return $this->belongsTo(Dokter::class);
+    }
+
+    public function schedule()
+    {
+        return $this->belongsTo(Schedule::class);
     }
 }

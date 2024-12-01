@@ -21,8 +21,13 @@ class Dokter extends Model
     ];
 
     // Relationships
-    public function poli()
+    public function schedules()
     {
-        return $this->belongsTo(Poli::class, 'poli_id'); // Assuming a foreign key `poli_id` in `dokters` table
+        return $this->hasMany(Schedule::class);
+    }
+
+    public function polis()
+    {
+        return $this->hasMany(Poli::class);
     }
 }
