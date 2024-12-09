@@ -16,10 +16,10 @@ return new class extends Migration
             $table->foreignId('pasien_id')->constrained('pasiens')->onDelete('cascade');
             $table->foreignId('dokter_id')->constrained('dokters')->onDelete('cascade');
             $table->foreignId('schedule_id')->constrained('schedules')->onDelete('cascade');
-            $table->string('poli');
+            $table->foreignId('specialization_id')->constrained('poli')->onDelete('cascade'); // Reference the poli table
             $table->text('complaint')->nullable();
             $table->string('status')->default('Belum diperiksa'); // Default status
-            $table->integer('queue_number')->nullable(); // Auto-assign logic
+            $table->integer('queue_number')->nullable(); // Queue logic
             $table->timestampsTz(0);
         });
     }

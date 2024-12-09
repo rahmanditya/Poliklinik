@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('schedules', function (Blueprint $table) {
+        Schema::create('daftar_poli', function (Blueprint $table) {
             $table->id();
             $table->foreignId('specialization_id')->nullable()->constrained('poli')->onDelete('set null');
-            $table->foreignId('dokter_id')->constrained();
-            $table->string('hari');
-            $table->date('date');
-            $table->time('start_time');
-            $table->time('end_time');
+            $table->foreignId('pasien_id')->constrained('pasiens')->onDelete('cascade');
+            $table->foreignId('jadwal_periksa_id')->nullable()->constrained('schedules')->onDelete('set null');
+            $table->integer('no_antrian')->nullable();
+            $table->text('keluhan')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('schedules');
+        Schema::dropIfExists('daftar_poli');
     }
 };

@@ -1,104 +1,101 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
-use App\Http\Controllers\DashboardController;
-use Symfony\Component\HttpFoundation\Response;
+use App\Http\Controllers\AuthController;
 use App\Http\Middleware\RoleMiddleware;
 
-use App\Http\Controllers\Admin\DokterController;
-use App\Http\Controllers\Admin\PasienController;
-use App\Http\Controllers\Admin\PoliController;
-use App\Http\Controllers\Admin\ObatController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DokterController;
+use App\Http\Controllers\PasienController;
+
+use App\Http\Controllers\Admin\AdminDokterController;
+use App\Http\Controllers\Admin\AdminPasienController;
+use App\Http\Controllers\Admin\AdminPoliController;
+use App\Http\Controllers\Admin\AdminObatController;
+
+use Illuminate\Support\Facades\Auth;
 
 Route::get('/', function () {
-    return view('index');
+    return view('login');
+})->name('home');
+
+Route::get('/login/index', [AuthController::class, 'showLoginForm'])->name('login.index');
+
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login.post');
+Route::get('/login', [AuthController::class, 'homeLogin'])->name('login');
+
+
+Route::middleware(['auth', RoleMiddleware::class])->group(function () {
+
+    Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
+
+
+    Route::get('/401', function () {
+        return view('401'); 
+    })->name('401');
+
+    // MANAGE DOKTER
+    Route::get('/admin/dokter', [AdminDokterController::class, 'index'])->name('admin.dokter.index');
+    Route::get('/admin/dokter/create', [AdminDokterController::class, 'create'])->name('admin.dokter.create');
+    Route::post('/admin/dokter', [AdminDokterController::class, 'store'])->name('admin.dokter.store');
+    Route::get('/admin/dokter/{dokter}', [AdminDokterController::class, 'show'])->name('admin.dokter.show');
+    Route::get('/admin/dokter/{dokter}/edit', [AdminDokterController::class, 'edit'])->name('admin.dokter.edit');
+    Route::put('/admin/dokter/{dokter}', [AdminDokterController::class, 'update'])->name('admin.dokter.update');
+    Route::delete('/admin/dokter/{dokter}', [AdminDokterController::class, 'destroy'])->name('admin.dokter.destroy');
+
+    // MANAGE PASIEN
+    Route::get('/admin/pasien', [AdminPasienController::class, 'index'])->name('admin.pasien.index');
+    Route::get('/admin/pasien/create', [AdminPasienController::class, 'create'])->name('admin.pasien.create');
+    Route::post('/admin/pasien', [AdminPasienController::class, 'store'])->name('admin.pasien.store');
+    Route::get('/admin/pasien/{pasien}', [AdminPasienController::class, 'show'])->name('admin.pasien.show');
+    Route::get('/admin/pasien/{pasien}/edit', [AdminPasienController::class, 'edit'])->name('admin.pasien.edit');
+    Route::put('/admin/pasien/{pasien}', [AdminPasienController::class, 'update'])->name('admin.pasien.update');
+    Route::delete('/admin/pasien/{pasien}', [AdminPasienController::class, 'destroy'])->name('admin.pasien.destroy');
+
+    // MANAGE POLI
+    Route::get('/admin/poli', [AdminPoliController::class, 'index'])->name('admin.poli.index');
+    Route::get('/admin/poli/create', [AdminPoliController::class, 'create'])->name('admin.poli.create');
+    Route::post('/admin/poli', [AdminPoliController::class, 'store'])->name('admin.poli.store');
+    Route::get('/admin/poli/{poli}', [AdminPoliController::class, 'show'])->name('admin.poli.show');
+    Route::get('/admin/poli/{poli}/edit', [AdminPoliController::class, 'edit'])->name('admin.poli.edit');
+    Route::put('/admin/poli/{poli}', [AdminPoliController::class, 'update'])->name('admin.poli.update');
+    Route::delete('/admin/poli/{poli}', [AdminPoliController::class, 'destroy'])->name('admin.poli.destroy');
+
+    Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
+
+    // MANAGE OBAT
+    // Route::get('/obat', [ObatController::class, 'index'])->name('obats.index');
+    // Route::get('/admin/obat/create', [ObatController::class, 'create'])->name('admin.obat.create');
+    // Route::post('/admin/obat', [ObatController::class, 'store'])->name('admin.obat.store');
+    // Route::get('/admin/obat/{obat}', [ObatController::class, 'show'])->name('admin.obat.show');
+    // Route::get('/admin/obat/{obat}/edit', [ObatController::class, 'edit'])->name('admin.obat.edit');
+    // Route::put('/admin/obat/{obat}', [ObatController::class, 'update'])->name('admin.obat.update');
+    // Route::delete('/admin/obat/{obat}', [ObatController::class, 'destroy'])->name('admin.obat.destroy');
 });
 
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'authenticate'])->name('login.post');
-
-
-// ADMIN DASHBOARD
-Route::middleware([
-    'auth:sanctum', 
-    RoleMiddleware::class.':admin'
-])->group(function () {
-    Route::get('/dashboard', [DashboardController::class, 'dashboard'])->name('admin.dashboard');
-
-    // Dokter
-    Route::get('/dokter', [DokterController::class, 'index'])->name('dokter.index');
-    Route::get('/dokter/create', [DokterController::class, 'create'])->name('dokter.create');
-    Route::post('/dokter', [DokterController::class, 'store'])->name('dokter.store');
-    Route::get('/dokter/{dokter}', [DokterController::class, 'show'])->name('dokter.show');
-    Route::get('/dokter/{dokter}/edit', [DokterController::class, 'edit'])->name('dokter.edit');
-    Route::put('/dokter/{dokter}', [DokterController::class, 'update'])->name('dokter.update');
-    Route::delete('/dokter/{dokter}', [DokterController::class, 'destroy'])->name('dokter.destroy');
-
-    // Pasien
-    Route::get('/pasien', [PasienController::class, 'index'])->name('pasien.index');
-    Route::get('/pasien/create', [PasienController::class, 'create'])->name('pasien.create');
-    Route::post('/pasien', [PasienController::class, 'store'])->name('pasien.store');
-    Route::get('/pasien/{pasien}', [PasienController::class, 'show'])->name('pasien.show');
-    Route::get('/pasien/{pasien}/edit', [PasienController::class, 'edit'])->name('pasien.edit');
-    Route::put('/pasien/{pasien}', [PasienController::class, 'update'])->name('pasien.update');
-    Route::delete('/pasien/{pasien}', [PasienController::class, 'destroy'])->name('pasien.destroy');
-
-    // Poli
-    Route::get('/poli', [PoliController::class, 'index'])->name('poli.index');
-    Route::get('/poli/create', [PoliController::class, 'create'])->name('poli.create');
-    Route::post('/poli', [PoliController::class, 'store'])->name('poli.store');
-    Route::get('/poli/{poli}', [PoliController::class, 'show'])->name('poli.show');
-    Route::get('/poli/{poli}/edit', [PoliController::class, 'edit'])->name('poli.edit');
-    Route::put('/poli/{poli}', [PoliController::class, 'update'])->name('poli.update');
-    Route::delete('/poli/{poli}', [PoliController::class, 'destroy'])->name('poli.destroy');
-
-    // Obats
-    Route::get('/obats', [ObatController::class, 'index'])->name('obats.index');
-    Route::get('/obats/create', [ObatController::class, 'create'])->name('obats.create');
-    Route::post('/obats', [ObatController::class, 'store'])->name('obats.store');
-    Route::get('/obats/{obat}', [ObatController::class, 'show'])->name('obats.show');
-    Route::get('/obats/{obat}/edit', [ObatController::class, 'edit'])->name('obats.edit');
-    Route::put('/obats/{obat}', [ObatController::class, 'update'])->name('obats.update');
-    Route::delete('/obats/{obat}', [ObatController::class, 'destroy'])->name('obats.destroy');
+Route::middleware(['auth', RoleMiddleware::class])->group(function () {
+    Route::get('/dokter/dashboard', [DokterController::class, 'index'])->name('dokter.dashboard');
 });
 
+Route::middleware(['auth', RoleMiddleware::class])->group(function () {
+    Route::get('/pasien/dashboard', [PasienController::class, 'index'])->name('pasien.dashboard');
 
+    Route::get('/pasien/poli', [PasienController::class, 'index'])->name('pasien.poli.index');
+    Route::get('/pasien/poli/{poli}', [PasienController::class, 'show'])->name('pasien.poli.show');
+    Route::get('/pasien/poli/store', [PasienController::class, 'store'])->name('pasien.poli.store');
 
-// // Route::middleware([
-// //     'auth:sanctum', 
-// //     RoleMiddleware::class.':dokter'
-// // ])->group(function () {
-// //     Route::get('/dokter/dashboard', [DashboardController::class, 'dashboard'])->name('dokter.dashboard');
-// // });
+    Route::post('/pasien/logout', [AuthController::class, 'logout'])->name('pasien.logout');
+});
 
-// // Route::middleware([
-// //     'auth:sanctum', 
-// //     RoleMiddleware::class.':pasien'
-// // ])->group(function () {
-// //     Route::get('/pasien/dashboard', [DashboardController::class, 'dashboard'])->name('pasien.dashboard');
-// // });
+Route::get('/login/admin', function () {
+    return redirect()->route('login.index', ['role' => 'admin']);
+})->name('admin.login');
 
-// // ADMIN DASHBOARD
-// Route::middleware(['auth:sanctum'])->group(function () {
-//     Route::prefix('admin')->name('admin.')->group(function () {
-//         Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard');
-//         Route::resource('/dokter', DokterController::class);
-//         Route::resource('/pasien', PasienController::class);
-//         Route::resource('/poli', PoliController::class);
-//         Route::resource('/obat', ObatController::class);
-//     });
-// });
+Route::get('/login/dokter', function () {
+    return redirect()->route('login.index', ['role' => 'dokter']);
+})->name('dokter.login');
 
-// // PASIEN DASHBOARD
-// Route::middleware(['auth:sanctum'])->group(function () {
-//     Route::prefix('pasien')->name('pasien.')->group(function () {
-//         Route::get('/dashboard', [DashboardController::class, 'pasienDashboard'])->name('dashboard');
-//         Route::get('/riwayat-poli', [RiwayatController::class, 'index'])->name('riwayat.index');
-//         Route::get('/riwayat-poli/{id}', [RiwayatController::class, 'detail'])->name('riwayat.detail');
-//         Route::get('/register', [RegisterController::class, 'create'])->name('register.create');
-//         Route::post('/register', [RegisterController::class, 'store'])->name('register.store');
-//     });
-// });
-
+Route::get('/login/pasien', function () {
+    return redirect()->route('login.index', ['role' => 'pasien']);
+})->name('pasien.login');
 

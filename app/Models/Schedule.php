@@ -15,4 +15,14 @@ class Schedule extends Model
     {
         return $this->hasMany(Poli::class);
     }
+
+    public function poli()
+    {
+        return $this->belongsTo(Poli::class, 'specialization_id');
+    }
+
+    public function daftarPoli()
+    {
+        return $this->hasMany(DaftarPoli::class);
+    }
 }

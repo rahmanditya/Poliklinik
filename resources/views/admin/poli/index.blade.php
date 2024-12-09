@@ -1,86 +1,76 @@
 @extends('layouts.admin')
 
-@section('title', 'Manage Pasien')
+@section('title', 'Manage Poli')
 
 @section('content')
 <main>
-    <div class="grid grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-4 sm:px-8">
-        <div class="container mx-auto">
-            <h1 class="text-xl font-bold mb-4">Daftar Pasien</h1>
-        </div>
-        <div class="container mx-auto">
-
-        </div>
-        <div class="container mx-auto">
-
-        </div>
-        <div class="container mx-auto flex items-center">
-            <span class="px-5">
-                <a href="{{ route('poli.create') }}" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Tambah Periksa</a>
-            </span>
-        </div>
-    </div>
-    <!-- TABEL POLI -->
-    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-        <table class="w-full text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">
-            <thead class="text-xs text-white uppercase bg-blue-600 dark:text-white">
-                <tr>
-                    <th scope="col" class="px-6 py-3">
-                        #
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama Pasien
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Nama Dokter
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Poli
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Jadwal
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Status
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Aksi
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
+    <!-- POLI  -->
+    <section class="text-gray-700 body-font">
+        <div class="container px-5 py-24 mx-auto">
+            <div class="flex flex-wrap -m-4 text-center">
                 @foreach ($polis as $poli)
-                <tr class="bg-blue-500 border-b border-blue-400">
-                    <th scope="row" class="px-6 py-4 font-medium text-blue-50 whitespace-nowrap dark:text-blue-100">
-                        {{ $loop->iteration }}
-                    </th>
-                    <td class="px-6 py-4">
-                        {{ $poli->pasien->name }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ $poli->dokter->name }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ $poli->poli }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ $poli->schedule->start_time }} - {{ $poli->schedule->end_time }}
-                    </td>
-                    <td class="px-6 py-4">
-                        {{ $poli->status }}
-                    </td>
-                    <td class="px-6 py-4">
-                        <a href="{{ route('poli.edit', $poli->id) }}" class="text-blue-700 bg-white hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:text-blue-700 dark:hover:text-white dark:hover:bg-blue-700 dark:focus:text-white">Edit</a>
-                        <form action="{{ route('poli.destroy', $poli->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="text-blue-700 bg-white hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:text-blue-700 dark:hover:text-white dark:hover:bg-blue-700 dark:focus:text-white">Hapus</button>
-                        </form>
-                    </td>
-                </tr>
+                <div class="p-4 md:w-1/4 sm:w-1/2 w-full">
+                    <div class="border-2 border-gray-600 px-4 py-6 rounded-lg transform transition duration-500 hover:scale-110">
+                        <a href="{{ route('admin.poli.show', ['poli' => $poli->id]) }}" class="poli-card block relative">
+                            <p class="title-font font-medium text-2xl text-gray-900">{{ $poli->name }}</p>
+                        </a>
+                        <!-- Icons -->
+                        <div class="absolute top-2 right-2 flex space-x-2">
+                            <a href="{{ route('admin.poli.edit', $poli->id) }}" class="text-gray-600 hover:text-blue-600">
+                                <i class="las la-edit"></i>
+                            </a>
+
+                            <a href="javascript:void(0);"
+                                data-url="{{ route('admin.poli.destroy', ['poli' => $poli->id]) }}"
+                                class="delete-icon text-gray-600 hover:text-red-600">
+                                <i class="las la-trash"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
                 @endforeach
-            </tbody>
-        </table>
-    </div>
+            </div>
+            <div class="flex justify-center mt-10">
+                <a href="{{ route('admin.poli.create') }}"
+                    class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-6 py-3 text-center flex items-center space-x-2">
+                    <i class="las la-plus text-lg"></i>
+                    <span>Tambah Poli</span>
+                </a>
+            </div>
+        </div>
+    </section>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Attach click event to all delete icons
+        document.querySelectorAll('.delete-icon').forEach(element => {
+            element.addEventListener('click', () => {
+                const url = element.getAttribute('data-url');
+                if (confirm('Apakah anda yakin ingin menghapus poli ini?')) {
+                    const form = document.createElement('form');
+                    form.action = url;
+                    form.method = 'POST';
+
+                    // Add CSRF token
+                    const csrfInput = document.createElement('input');
+                    csrfInput.type = 'hidden';
+                    csrfInput.name = '_token';
+                    csrfInput.value = '{{ csrf_token() }}';
+                    form.appendChild(csrfInput);
+
+                    // Add DELETE method override
+                    const methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    methodInput.value = 'DELETE';
+                    form.appendChild(methodInput);
+
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        });
+    });
+</script>
 @endsection

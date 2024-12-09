@@ -8,7 +8,7 @@ use App\Models\Pasien;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
-class PasienController extends Controller
+class AdminPasienController extends Controller
 {
     // Display a listing of the resource
     public function index()
@@ -44,7 +44,7 @@ class PasienController extends Controller
             'address'
         ]));
 
-        $password = bcrypt('defaultpassword'); // Generate a default password or use a random generator
+        $password = bcrypt('123123123'); // Generate a default password or use a random generator
         $role = DB::selectOne("SELECT id FROM roles WHERE role_code = 'pasien'");
         DB::table("users")->insert([
             "name" => $request->name,
@@ -53,7 +53,7 @@ class PasienController extends Controller
             "role_id" => $role->id,
             "status_code" => 'user_active'
         ]);
-        return redirect()->route('pasien.index')->with('success', 'Pasien created successfully with login access.');
+        return redirect()->route('admin.pasien.index')->with('success', 'Pasien created successfully with login access.');
     }
 
     // Display the specified resource
@@ -64,7 +64,7 @@ class PasienController extends Controller
         }
 
         $pasien = Pasien::findOrFail($id);
-        return view('admin.pasien.show', compact('pasien'));
+        return view('adminadmin..pasien.show', compact('pasien'));
     }
 
     // Show the form for editing the specified resource

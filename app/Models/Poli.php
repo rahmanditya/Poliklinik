@@ -9,30 +9,27 @@ class Poli extends Model
 {
     use HasFactory;
 
-    protected $table = 'polis';
+    protected $table = 'poli'; // Explicitly specify the table if not default
+    protected $fillable = ['name'];
 
-    protected $fillable = [
-        'pasien_id',
-        'dokter_id',
-        'schedule_id',
-        'poli',
-        'keluhan',
-        'status',
-        'nomor_antrian',
-    ];
-
-    public function pasien()
+    public function poli()
     {
-        return $this->belongsTo(Pasien::class);
+        return $this->hasMany(Poli::class);
     }
 
-    public function dokter()
+    public function dokters()
     {
-        return $this->belongsTo(Dokter::class);
+        return $this->hasMany(Dokter::class, 'specialization_id');
     }
 
-    public function schedule()
+    public function daftarPoli()
     {
-        return $this->belongsTo(Schedule::class);
+        return $this->hasMany(DaftarPoli::class, 'specialization_id');
     }
+
+    public function periksa()
+    {
+        return $this->hasManyThrough(Periksa::class, DaftarPoli::class, 'specialization_id');
+    }
+
 }

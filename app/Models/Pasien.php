@@ -20,13 +20,28 @@ class Pasien extends Model
         'address', // Assuming a unique identifier for patients
     ];
 
-    public function polis()
+    public function daftarPoli()
     {
-        return $this->hasMany(Poli::class);
+        return $this->hasMany(DaftarPoli::class);
     }
 
     public function user()
     {
         return $this->hasOne(User::class, 'email', 'email'); // Matches Pasien's email with User's email
+    }
+
+    public function periksa()
+    {
+        return $this->hasMany(Periksa::class);
+    }
+
+    public function poli()
+    {
+        return $this->belongsTo(Poli::class, 'specialization_id');
+    }
+
+    public function specialization()
+    {
+        return $this->belongsTo(Poli::class, 'specialization_id');
     }
 }

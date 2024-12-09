@@ -9,15 +9,14 @@ class Dokter extends Model
 {
     use HasFactory;
 
-    // Table associated with the model (if using custom table names)
     protected $table = 'dokters';
 
-    // Fields that can be mass-assigned
     protected $fillable = [
         'name',
         'email',
         'phone',
-        'specialization',
+        'specialization_id',
+        'status',
     ];
 
     // Relationships
@@ -26,8 +25,18 @@ class Dokter extends Model
         return $this->hasMany(Schedule::class);
     }
 
-    public function polis()
+    public function poli()
     {
-        return $this->hasMany(Poli::class);
+        return $this->belongsTo(Poli::class, 'specialization_id');
+    }
+
+    public function specialization()
+    {
+        return $this->belongsTo(Poli::class, 'specialization_id');
+    }
+
+    public function periksa()
+    {
+        return $this->hasMany(Periksa::class);
     }
 }

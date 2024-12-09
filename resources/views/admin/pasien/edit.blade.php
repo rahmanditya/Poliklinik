@@ -5,10 +5,10 @@
 @section('content')
 <main>
     <div class="grid grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-4 sm:px-8">
-        <h1 class="text-xl font-bold text-center col-span-4">Edit Pasien</h1>
+        <h1 class="text-xl font-medium text-center col-span-4">Edit Pasien</h1>
     </div>
     <div class="container mx-auto">
-        <form action="{{ route('pasien.update', $pasien->id) }}" method="POST" class="max-w-md mx-auto">
+        <form action="{{ route('admin.pasien.update', $pasien->id) }}" method="POST" class="max-w-md mx-auto">
             @csrf
             @method('PUT')
             <div class="relative z-0 w-full mb-5 group">

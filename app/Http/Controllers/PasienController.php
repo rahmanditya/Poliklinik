@@ -1,32 +1,45 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Poli;
-use App\Models\Pasien;
+use App\Models\DaftarPoli;
 use App\Models\Dokter;
+use App\Models\Pasien;
 use App\Models\Schedule;
 
-class PoliController extends Controller
+
+
+
+class PasienController extends Controller
 {
     public function index()
     {
-        $polis = Poli::with(['pasien', 'dokter', 'schedule'])->get();
-
-        return view('admin.poli.index', compact('polis'));
-    }
-
-    public function create()
-    {
         $polis = Poli::all();
-        $pasiens = Pasien::all();
-        $dokters = Dokter::all();
-        $schedules = Schedule::all();
-        
-        return view('admin.poli.create', compact('polis', 'pasiens', 'dokters', 'schedules'));
+        return view('pasien.poli.index', compact('polis'));
     }
+
+
+    public function show($id)
+    {
+        $user = Auth::user();
+        logger('Poli ID passed to show method: ' . $id);
+
+        // Fetch the Poli and related Dokters
+        $poli = Poli::with(['dokters', 'periksa.pasien'])->findOrFail($id);
+
+        // Get all related Schedules for the Dokters in the Poli
+        $schedules = Schedule::whereIn('dokter_id', $poli->dokters->pluck('id'))->get();
+
+        $medical_record_number = optional($user->pasien)->medical_record_number;
+        $dokters = $poli->dokters; // List of dokters in this poli
+        $allDokters = Dokter::all(); // All dokters for the dropdown
+
+        return view('pasien.poli.show', compact('poli', 'dokters', 'schedules', 'allDokters', 'medical_record_number'));
+    }
+
 
     public function store(Request $request)
     {

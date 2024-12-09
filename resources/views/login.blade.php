@@ -45,7 +45,7 @@
                         </div>
                         <div class="pt-5 text-base font-semibold leading-7">
                             <p>
-                                <a href="/login?role=pasien&role_id=3" class="text-sky-500 transition-all duration-300 group-hover:text-white">Login sebagai pasien
+                                <a href="/login/pasien" class="text-sky-500 transition-all duration-300 group-hover:text-white">Login sebagai pasien
                                     &rarr;
                                 </a>
                             </p>
@@ -81,7 +81,7 @@
                         </div>
                         <div class="pt-5 text-base font-semibold leading-7">
                             <p>
-                                <a href="/login?role=dokter&role_id=2" class="text-sky-500 transition-all duration-300 group-hover:text-white">Login sebagai dokter
+                                <a href="/login/dokter" class="text-sky-500 transition-all duration-300 group-hover:text-white">Login sebagai dokter
                                     &rarr;
                                 </a>
                             </p>

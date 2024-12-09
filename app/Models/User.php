@@ -22,7 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role_id'
+        'role_id',
+        'role_code'
     ];
 
     /**
@@ -50,17 +51,23 @@ class User extends Authenticatable
 
     public function getRoleAttribute()
     {
-        $roles = [
+        $role = [
             1 => 'admin',
             2 => 'dokter',
             3 => 'pasien',
         ];
 
-        return $roles[$this->role_id] ?? 'unknown';
+        return isset($this->role_id) ? ($role[$this->role_id] ?? 'unknown') : 'unknown';
     }
+
 
     public function pasien()
     {
         return $this->hasOne(Pasien::class, 'email', 'email'); // Matches User's email with Pasien's email
+    }
+
+    public function role()
+    {
+        return $this->belongsTo(Role::class);
     }
 }
