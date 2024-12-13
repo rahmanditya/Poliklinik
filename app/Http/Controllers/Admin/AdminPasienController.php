@@ -10,20 +10,17 @@ use Illuminate\Support\Facades\DB;
 
 class AdminPasienController extends Controller
 {
-    // Display a listing of the resource
     public function index()
     {
         $pasiens = Pasien::all();
         return view('admin.pasien.index', compact('pasiens'));
     }
 
-    // Show the form for creating a new resource
     public function create()
     {
         return view('admin.pasien.create');
     }
 
-    // Store a newly created resource in storage
     public function store(Request $request)
     {
         $request->validate([
@@ -44,7 +41,7 @@ class AdminPasienController extends Controller
             'address'
         ]));
 
-        $password = bcrypt('123123123'); // Generate a default password or use a random generator
+        $password = bcrypt('123123123'); 
         $role = DB::selectOne("SELECT id FROM roles WHERE role_code = 'pasien'");
         DB::table("users")->insert([
             "name" => $request->name,
@@ -56,7 +53,6 @@ class AdminPasienController extends Controller
         return redirect()->route('admin.pasien.index')->with('success', 'Pasien created successfully with login access.');
     }
 
-    // Display the specified resource
     public function show($id)
     {
         if (!is_numeric($id)) {
@@ -64,17 +60,15 @@ class AdminPasienController extends Controller
         }
 
         $pasien = Pasien::findOrFail($id);
-        return view('adminadmin..pasien.show', compact('pasien'));
+        return view('admin.pasien.index', compact('pasien'));
     }
 
-    // Show the form for editing the specified resource
     public function edit($id)
     {
         $pasien = Pasien::findOrFail($id);
         return view('admin.pasien.edit', compact('pasien'));
     }
 
-    // Update the specified resource in storage
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -86,15 +80,13 @@ class AdminPasienController extends Controller
 
         $pasien = Pasien::findOrFail($id);
         $pasien->update($request->all());
-        return redirect()->route('pasien.index')->with('success', 'Pasien updated successfully');
+        return redirect()->route('admin.pasien.index')->with('success', 'Pasien updated successfully');
     }
 
-    // Remove the specified resource from storage
     public function destroy($id)
     {
-        $pasienUser = User::findOrFail($id);
         $pasien = Pasien::findOrFail($id);
-        $pasien&$pasienUser->delete();
-        return redirect()->route('pasien.index')->with('success', 'Pasien deleted successfully');
+        $pasien->delete();
+        return redirect()->route('admin.pasien.index')->with('success', 'Pasien deleted successfully');
     }
 }

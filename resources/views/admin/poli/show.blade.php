@@ -18,7 +18,7 @@
         <!-- route('poli.show', ['poli' => $poli->id]) -->
 
         <div class="container mx-auto flex items-center">
-            
+
         </div>
     </div>
 
@@ -29,11 +29,7 @@
         </div>
         <div class="p-4 bg-green-500 text-white rounded-lg">
             <h3 class="text-lg font-bold">Pasien Terdaftar</h3>
-            <p>{{ $poli->periksa->count() }}</p>
-        </div>
-        <div class="p-4 bg-yellow-500 text-white rounded-lg">
-            <h3 class="text-lg font-bold">Konsultasi Selesai</h3>
-            <p>{{ $poli->periksa->where('status', 'completed')->count() }}</p>
+            <p>{{ $pasiens->count() }}</p>
         </div>
     </div>
 

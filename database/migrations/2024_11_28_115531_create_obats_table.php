@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('obats', function (Blueprint $table) {
             $table->id();
-            $table->string('name'); 
-            $table->text('description')->nullable(); 
-            $table->integer('stock'); 
-            $table->decimal('price', 10, 2);
+            $table->string('nama');
+            $table->text('kemasan')->nullable();
+            $table->decimal('harga', 9, 3);
             $table->timestamps();
         });
     }

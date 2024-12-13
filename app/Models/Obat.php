@@ -12,9 +12,8 @@ class Obat extends Model
     protected $table = 'obats';
 
     protected $fillable = [
-        'name',
-        'description',
-        'stock',
-        'price',
+        'nama',
+        'kemasan',
+        'harga',
     ];
 }

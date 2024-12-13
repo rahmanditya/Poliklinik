@@ -13,21 +13,21 @@
 <body>
     <input type="checkbox" id="nav-toggle">
     <div class="sidebar">
-        <div class="sidebar-brand">
+        <!-- <div class="sidebar-brand">
             <h2><span class="las la-user-circle"></span>
                 <span>Poliklinik</span>
             </h2>
-        </div>
+        </div> -->
 
         <div class="sidebar-menu">
             <ul>
                 <li>
-                    <a href="{{ route('pasien.dashboard') }}" class="active {{ Request::is('pasien/dashboard') ? 'active' : '' }}">
+                    <a href="{{ route('pasien.dashboard') }}" class="{{ Request::is('pasien/dashboard') ? 'active' : '' }}">
                         <span class="las la-igloo"></span><span>Dashboard</span>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ route('pasien.poli.index') }}" class="{{ Request::is('pasien/poli/index') ? 'active' : '' }}">
+                    <a href="{{ route('pasien.poli.index') }}" class="{{ Request::is('pasien/poli*') ? 'active' : '' }}">
                         <span class="las la-clinic-medical"></span><span>Poli</span>
                     </a>
                 </li>
@@ -41,7 +41,7 @@
                     <span class="las la-bars"></span>
                 </label>
 
-                Dashboard Pasien
+                Halo {{ $user->name ?? 'Tidak Diketahui' }}
             </h5>
 
             <div class="search-wrapper">

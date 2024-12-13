@@ -19,7 +19,6 @@ class AdminDokterController extends Controller
     }
 
 
-    // Show the form for creating a new resource
     public function create()
     {
         $specializations = Poli::all();
@@ -37,14 +36,28 @@ class AdminDokterController extends Controller
             'specialization_id' => 'required|exists:poli,id',
         ]);
 
-        Dokter::create($validatedData);
 
-        return redirect()->route('admin.dokter.index')->with('success', 'Dokter created successfully');
-        
+        $dokter = Dokter::create($request->only([
+            'name',
+            'email',
+            'phone',
+            'status',
+            'specialization_id'
+        ]));
+
+        $password = bcrypt('123123123');
+        $role = DB::selectOne("SELECT id FROM roles WHERE role_code = 'dokter'");
+        DB::table("users")->insert([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => $password,
+            "role_id" => $role->id,
+            "status_code" => 'user_active'
+        ]);
+        return redirect()->route('admin.dokter.index')->with('success', 'Dokter created successfully with login access.');
     }
 
 
-    // Display the specified resource
     public function show($id)
     {
         if (!is_numeric($id)) {
@@ -55,27 +68,47 @@ class AdminDokterController extends Controller
         return view('admin.dokter.show', compact('dokter'));
     }
 
-    // Show the form for editing the specified resource
     public function edit($id)
     {
+        $specializations = Poli::all();
+        $dokters = Dokter::with('specialization')->get();
         $dokter = Dokter::findOrFail($id);
-        return view('admin.dokter.edit', compact('dokter'));
+        $polis = Poli::all(); 
+        return view('admin.dokter.edit', compact('dokter', 'polis', 'dokters', 'specializations'));
     }
 
-    // Update the specified resource in storage
     public function update(Request $request, $id)
     {
+        $dokter = Dokter::findOrFail($id);
+
         $request->validate([
-            'name' => 'required',
-            'specialization' => 'required',
+            'name' => 'required|string|max:255',
+            'email' => "required|email|unique:dokters,email,{$dokter->id}", 
+            'phone' => 'required|string|max:20',
+            'status' => 'nullable|string|max:255',
+            'specialization_id' => 'required|exists:poli,id',
         ]);
 
-        $dokter = Dokter::findOrFail($id);
-        $dokter->update($request->all());
-        return redirect()->route('admin.dokter.index')->with('success', 'Dokter updated successfully');
+        $dokter->update($request->only([
+            'name',
+            'email',
+            'phone',
+            'status',
+            'specialization_id',
+        ]));
+
+        DB::table('users')
+            ->where('email', $dokter->email) 
+            ->update([
+                'name' => $request->name,
+                'email' => $request->email,
+            ]);
+
+        return redirect()->route('admin.dokter.index')->with('success', 'Dokter updated successfully.');
     }
 
-    // Remove the specified resource from storage
+
+
     public function destroy($id)
     {
         $dokter = Dokter::findOrFail($id);
@@ -83,23 +116,4 @@ class AdminDokterController extends Controller
         return redirect()->route('admin.dokter.index')->with('success', 'Dokter deleted successfully');
     }
 
-    public function assign(Request $request, $poliId)
-    {
-        // Validate the doctor id
-        $request->validate([
-            'dokter_id' => 'required|exists:dokters,id',
-        ]);
-
-        // Find the selected poli by its ID
-        $poli = Poli::findOrFail($poliId);
-
-        // Find the selected doctor by ID
-        $dokter = Dokter::findOrFail($request->dokter_id);
-
-        // Attach the doctor to the poli (assuming a many-to-many relationship)
-        $poli->dokters()->attach($dokter);
-
-        // Redirect or return a success message
-        return redirect()->route('admin.poli.show', $poliId)->with('success', 'Dokter berhasil ditambahkan ke poli');
-    }
 }

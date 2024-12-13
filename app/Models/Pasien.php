@@ -17,13 +17,10 @@ class Pasien extends Model
         'email',
         'phone',
         'date_of_birth',
-        'address', // Assuming a unique identifier for patients
+        'address',
+        'password',
+        
     ];
-
-    public function daftarPoli()
-    {
-        return $this->hasMany(DaftarPoli::class);
-    }
 
     public function user()
     {
@@ -43,5 +40,10 @@ class Pasien extends Model
     public function specialization()
     {
         return $this->belongsTo(Poli::class, 'specialization_id');
+    }
+
+    public function daftarPoli()
+    {
+        return $this->hasMany(DaftarPoli::class, 'pasien_id');
     }
 }

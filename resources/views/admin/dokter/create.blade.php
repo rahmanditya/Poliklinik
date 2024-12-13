@@ -4,6 +4,7 @@
 
 @section('content')
 <main>
+    
     <div class="grid grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-4 sm:px-8">
         <h1 class="text-xl font-medium text-center col-span-4">Tambah Dokter</h1>
     </div>
@@ -68,5 +69,6 @@
             </button>
         </form>
     </div>
+
 </main>
 @endsection

@@ -11,62 +11,97 @@ use App\Models\Schedule;
 use App\Models\Periksa;
 use App\Models\DaftarPoli;
 
+use Illuminate\Support\Facades\DB;
+
 class AdminPoliController extends Controller
 {
     public function index()
     {
-        $polis = Poli::all(); // Fetch all records from the Poli table
+        $polis = Poli::all();
         return view('admin.poli.index', compact('polis'));
     }
 
     public function create()
     {
-        $polis = Poli::all();
-        $pasiens = Pasien::all();
-        $dokters = Dokter::all();
-        $schedules = Schedule::all();
+        $poli = Poli::all();
 
-        return view('admin.poli.create', compact('polis', 'pasiens', 'dokters', 'schedules'));
+        return view('admin.poli.create', compact('poli'));
     }
 
-    // public function store(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'pasien_id' => 'required|exists:pasiens,id',
-    //         'dokter_id' => 'required|exists:dokters,id',
-    //         'schedule_id' => 'required|exists:schedules,id',
-    //         'poli' => 'required|string|max:255',
-    //         'complaint' => 'nullable|string',
-    //     ]);
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|unique:poli,name|max:255',
+        ]);
 
-    //     // Assign the queue number dynamically
-    //     $queueNumber = Poli::where('schedule_id', $validated['schedule_id'])->count() + 1;
+        Poli::create([
+            'name' => $request->input('name'),
+        ]);
 
-    //     Poli::create([
-    //         'pasien_id' => $validated['pasien_id'],
-    //         'dokter_id' => $validated['dokter_id'],
-    //         'schedule_id' => $validated['schedule_id'],
-    //         'poli' => $validated['poli'],
-    //         'complaint' => $validated['complaint'],
-    //         'queue_number' => $queueNumber,
-    //     ]);
+        return redirect()->route('admin.poli.index')->with('success', 'Poli created successfully!');
+    }
 
-    //     return redirect()->route('admin.poli.index')->with('success', 'Poli appointment created successfully!');
-    // }
+    public function edit($id)
+    {
+        $poli = Poli::findOrFail($id);
+        return view('admin.poli.edit', compact('poli'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $poli = Poli::findOrFail($id);
+
+        // Validate the incoming data
+        $request->validate([
+            'name' => 'required|string|max:255',
+        ]);
+
+        // Update the dokter record
+        $poli->update($request->only([
+            'name',
+        ]));
+
+
+        return redirect()->route('admin.poli.index')->with('success', 'Poli updated successfully.');
+    }
 
     public function show($id)
     {
-        // Debugging: Log or dump the $id value
-        logger('Poli ID passed to show method: ' . $id);
+        if (!is_numeric($id)) {
+            abort(404, 'Invalid Poli ID format.');
+        }
 
-        $poli = Poli::with(['dokters', 'periksa.pasien'])->findOrFail($id); // Ensure ID is numeric
+        $poli = Poli::with(['dokters'])->findOrFail($id);
 
         $dokters = $poli->dokters;
-        $pasiens = $poli->periksa->pluck('pasien');
+
+        $daftar_poli = DaftarPoli::whereHas('dokter', function ($query) use ($poli) {
+            $query->whereIn('id', $poli->dokters->pluck('id'));
+        })->get();
+
+        $pasiens = Pasien::whereIn('id', $daftar_poli->pluck('pasien_id'))->get();
+
         $allDokters = Dokter::all();
 
-        return view('admin.poli.show', compact('poli', 'dokters', 'pasiens', 'allDokters'));
+        return view('admin.poli.show', compact('poli', 'dokters', 'allDokters', 'pasiens', 'daftar_poli'));
     }
+
+
+    public function assign(Request $request, $poliId)
+    {
+        $request->validate([
+            'dokter_id' => 'required|exists:dokters,id',
+        ]);
+
+        $poli = Poli::findOrFail($poliId);
+
+        $dokter = Dokter::findOrFail($request->dokter_id);
+
+        $poli->dokters()->attach($dokter);
+
+        return redirect()->route('admin.poli.show', $poliId)->with('success', 'Dokter berhasil ditambahkan ke poli');
+    }
+
 
     public function destroy($id)
     {

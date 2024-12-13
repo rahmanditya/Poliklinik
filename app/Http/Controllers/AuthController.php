@@ -5,23 +5,73 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Pasien;
 use Illuminate\Support\Facades\Crypt;
+
+use Illuminate\Support\Facades\DB;
 
 
 class AuthController extends Controller
 {
     public function showLoginForm(Request $request)
     {
-        // Retrieve query parameters for role and role_id
         $role = $request->query('role');
 
-        // Validate role against allowed roles
         if (!in_array($role, ['admin', 'dokter', 'pasien'])) {
             abort(404, 'Invalid role specified.');
         }
 
-        // Pass role and role_id to the view
         return view('auth.login', compact('role'));
+    }
+
+    public function showRegisterForm(Request $request)
+    {
+        return view('auth.register');
+    }
+
+    public function post(Request $request)
+    {
+        // Validate the input fields
+        $request->validate([
+            'medical_record_number' => 'required',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'phone' => 'required',
+            'date_of_birth' => 'required|date',
+            'address' => 'required',
+            'password' => 'required|min:6|confirmed', // Password must be confirmed
+        ]);
+
+        // Create the `pasien` record
+        $pasien = Pasien::create($request->only([
+            'medical_record_number',
+            'name',
+            'email',
+            'phone',
+            'date_of_birth',
+            'address',
+        ]));
+
+        // Hash the password
+        $hashedPassword = bcrypt($request->password);
+
+        // Get the role ID for 'pasien'
+        $role = DB::selectOne("SELECT id FROM roles WHERE role_code = 'pasien'");
+
+        // Create the user record
+        DB::table("users")->insert([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => $hashedPassword,
+            "role_id" => $role->id,
+            "status_code" => 'user_active',
+            "created_at" => now(),
+            "updated_at" => now(),
+        ]);
+
+        // Redirect to the login page with success message
+        return redirect()->route('login.index', ['role' => 'pasien'])
+            ->with('success', 'Registration successful! Please login.');
     }
 
 
@@ -42,19 +92,15 @@ class AuthController extends Controller
 
         $credentials = $request->only('email', 'password');
 
-        // Attempt to log in the user with email and password
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            // Ensure the role_id from the form matches the logged-in user's role_id
             if ($user->role != $request->input('role')) {
-                Auth::logout(); // Logout the user if the roles do not match
+                Auth::logout();
                 return back()->withErrors(['login_error' => 'Password atau Email salah.'])->withInput();
             }
-                        // 'Anda bukan ' . $user->role . '.'
 
 
-            // Redirect based on the user's role
             switch ($user->role) {
                 case 'admin':
                     return redirect()->route('admin.dashboard');
@@ -72,10 +118,10 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout(); // Log out the user
-        $request->session()->invalidate(); // Invalidate the session
-        $request->session()->regenerateToken(); // Regenerate CSRF token for security
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-        return redirect()->route('home'); // Redirect to the home route (defined below)
+        return redirect()->route('home');
     }
 }

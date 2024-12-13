@@ -19,10 +19,9 @@ class Dokter extends Model
         'status',
     ];
 
-    // Relationships
     public function schedules()
     {
-        return $this->hasMany(Schedule::class);
+        return $this->hasMany(Schedule::class, 'dokter_id');
     }
 
     public function poli()
@@ -39,4 +38,10 @@ class Dokter extends Model
     {
         return $this->hasMany(Periksa::class);
     }
+    
+    public function user()
+    {
+        return $this->hasOne(User::class, 'email', 'email'); // Matches Pasien's email with User's email
+    }
+
 }

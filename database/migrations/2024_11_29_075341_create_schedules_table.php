@@ -13,8 +13,7 @@ return new class extends Migration
     {
         Schema::create('schedules', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('specialization_id')->nullable()->constrained('poli')->onDelete('set null');
-            $table->foreignId('dokter_id')->constrained();
+            $table->foreignId('dokter_id')->nullable()->constrained('dokters')->onDelete('set null');
             $table->string('hari');
             $table->date('date');
             $table->time('start_time');

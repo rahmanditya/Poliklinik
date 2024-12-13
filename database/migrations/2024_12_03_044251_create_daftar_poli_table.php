@@ -13,11 +13,12 @@ return new class extends Migration
     {
         Schema::create('daftar_poli', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('specialization_id')->nullable()->constrained('poli')->onDelete('set null');
+            $table->foreignId('dokter_id')->nullable()->constrained('dokters')->onDelete('set null');
             $table->foreignId('pasien_id')->constrained('pasiens')->onDelete('cascade');
-            $table->foreignId('jadwal_periksa_id')->nullable()->constrained('schedules')->onDelete('set null');
+            $table->foreignId('schedule_id')->nullable()->constrained('schedules')->onDelete('set null');
             $table->integer('no_antrian')->nullable();
             $table->text('keluhan')->nullable();
+            $table->enum('status', ['selesai', 'dalam_antrian', 'menunggu'])->default('menunggu'); // Add status column
             $table->timestamps();
         });
     }
@@ -25,8 +26,10 @@ return new class extends Migration
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
-        Schema::dropIfExists('daftar_poli');
+        Schema::table('daftar_poli', function (Blueprint $table) {
+            $table->dropColumn('status');
+        });
     }
 };

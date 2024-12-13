@@ -21,7 +21,7 @@
         </div>
     </div>
     <!-- TABEL DOKTER -->
-    <div class="dokter-index-table">
+    <div class="index-table">
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left rtl:text-right text-blue-100 dark:text-blue-100">
                 <thead class="text-xs text-white uppercase bg-blue-600 dark:text-white">
@@ -74,4 +74,18 @@
         </div>
     </div>
 </main>
+@push('scripts')
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const sidebar = document.querySelector(".sidebar");
+        const header = document.querySelector("header");
+
+        if (!sessionStorage.getItem("hasAnimated")) {
+            sidebar?.classList.add("animated");
+            header?.classList.add("animated");
+            sessionStorage.setItem("hasAnimated", "true");
+        }
+    });
+</script>
+@endpush
 @endsection

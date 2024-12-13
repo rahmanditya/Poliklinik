@@ -66,8 +66,23 @@ class User extends Authenticatable
         return $this->hasOne(Pasien::class, 'email', 'email'); // Matches User's email with Pasien's email
     }
 
+    // public function role()
+    // {
+    //     return $this->belongsTo(Role::class);
+    // }
+
+    // public function dokter()
+    // {
+    //     return $this->hasOne(Dokter::class);
+    // }
+
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+    public function dokter()
+    {
+        return $this->hasOne(Dokter::class, 'email');
     }
 }

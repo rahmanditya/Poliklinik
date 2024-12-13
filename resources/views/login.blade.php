@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Poliklinik Udinus</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap" rel="stylesheet">
     @vite('resources/css/app.css') 
 </head>
 
@@ -77,7 +78,7 @@
                         </span>
                         <div
                             class="space-y-6 pt-5 text-base leading-7 text-gray-600 transition-all duration-300 group-hover:text-white/90">
-                            <p>Di portal dokter, anda dapat mengelola pasien</p>
+                            <p>Di portal dokter, anda dapat memeriksa pasien dan mengatur jadwal anda</p>
                         </div>
                         <div class="pt-5 text-base font-semibold leading-7">
                             <p>

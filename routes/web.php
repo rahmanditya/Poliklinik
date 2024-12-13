@@ -15,24 +15,32 @@ use App\Http\Controllers\Admin\AdminObatController;
 
 use Illuminate\Support\Facades\Auth;
 
+// HOME
 Route::get('/', function () {
     return view('login');
 })->name('home');
 
+// REG PASIEN
+Route::get('/register/index', [AuthController::class, 'showRegisterForm'])->name('register.index');
+Route::post('/register/post', [AuthController::class, 'post'])->name('register.post');
+
+// LOGIN
 Route::get('/login/index', [AuthController::class, 'showLoginForm'])->name('login.index');
 
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.post');
 Route::get('/login', [AuthController::class, 'homeLogin'])->name('login');
 
 
+// AUTH EROR
+Route::get('/401', function () {
+    return view('401');
+})->name('401');
+
+
+// ADMIN
 Route::middleware(['auth', RoleMiddleware::class])->group(function () {
 
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
-
-
-    Route::get('/401', function () {
-        return view('401'); 
-    })->name('401');
 
     // MANAGE DOKTER
     Route::get('/admin/dokter', [AdminDokterController::class, 'index'])->name('admin.dokter.index');
@@ -61,31 +69,49 @@ Route::middleware(['auth', RoleMiddleware::class])->group(function () {
     Route::put('/admin/poli/{poli}', [AdminPoliController::class, 'update'])->name('admin.poli.update');
     Route::delete('/admin/poli/{poli}', [AdminPoliController::class, 'destroy'])->name('admin.poli.destroy');
 
-    Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
-
     // MANAGE OBAT
-    // Route::get('/obat', [ObatController::class, 'index'])->name('obats.index');
-    // Route::get('/admin/obat/create', [ObatController::class, 'create'])->name('admin.obat.create');
-    // Route::post('/admin/obat', [ObatController::class, 'store'])->name('admin.obat.store');
-    // Route::get('/admin/obat/{obat}', [ObatController::class, 'show'])->name('admin.obat.show');
-    // Route::get('/admin/obat/{obat}/edit', [ObatController::class, 'edit'])->name('admin.obat.edit');
-    // Route::put('/admin/obat/{obat}', [ObatController::class, 'update'])->name('admin.obat.update');
-    // Route::delete('/admin/obat/{obat}', [ObatController::class, 'destroy'])->name('admin.obat.destroy');
+    Route::get('admin/obat', [AdminObatController::class, 'index'])->name('admin.obat.index');
+    Route::get('/admin/obat/create', [AdminObatController::class, 'create'])->name('admin.obat.create');
+    Route::post('/admin/obat', [AdminObatController::class, 'store'])->name('admin.obat.store');
+    Route::get('/admin/obat/{obat}', [AdminObatController::class, 'show'])->name('admin.obat.show');
+    Route::get('/admin/obat/{obat}/edit', [AdminObatController::class, 'edit'])->name('admin.obat.edit');
+    Route::put('/admin/obat/{obat}', [AdminObatController::class, 'update'])->name('admin.obat.update');
+    Route::delete('/admin/obat/{obat}', [AdminObatController::class, 'destroy'])->name('admin.obat.destroy');
+
+    Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
 
-Route::middleware(['auth', RoleMiddleware::class])->group(function () {
-    Route::get('/dokter/dashboard', [DokterController::class, 'index'])->name('dokter.dashboard');
-});
+// DOKTER
 
 Route::middleware(['auth', RoleMiddleware::class])->group(function () {
-    Route::get('/pasien/dashboard', [PasienController::class, 'index'])->name('pasien.dashboard');
+    Route::get('/dokter/dashboard', [DokterController::class, 'dashboard'])->name('dokter.dashboard');
+
+    Route::get('/dokter/schedule', [DokterController::class, 'indexJadwal'])->name('dokter.schedule.index');
+    Route::get('/dokter/schedule/create', [DokterController::class, 'createJadwal'])->name('dokter.schedule.create');
+    Route::post('/dokter/schedule', [DokterController::class, 'storeJadwal'])->name('dokter.schedule.store');
+
+    Route::get('/dokter/periksa/', [DokterController::class, 'index'])->name('dokter.periksa.index');
+    Route::get('/dokter/periksa/{pasien}', [DokterController::class, 'show'])->name('dokter.periksa.show');
+    Route::get('/dokter/riwayat/', [DokterController::class, 'index'])->name('dokter.riwayat.index');
+    Route::get('/dokter/profil/', [DokterController::class, 'index'])->name('dokter.profil.index');
+
+    Route::post('/dokter/logout', [AuthController::class, 'logout'])->name('dokter.logout');
+});
+
+// PASIEN
+
+Route::middleware(['auth', RoleMiddleware::class])->group(function () {
+    
+    Route::get('/pasien/dashboard', [PasienController::class, 'dashboard'])->name('pasien.dashboard');
 
     Route::get('/pasien/poli', [PasienController::class, 'index'])->name('pasien.poli.index');
     Route::get('/pasien/poli/{poli}', [PasienController::class, 'show'])->name('pasien.poli.show');
-    Route::get('/pasien/poli/store', [PasienController::class, 'store'])->name('pasien.poli.store');
+    Route::post('/pasien/poli/store', [PasienController::class, 'store'])->name('pasien.poli.store');
 
     Route::post('/pasien/logout', [AuthController::class, 'logout'])->name('pasien.logout');
 });
+
+// ROLE AUTH
 
 Route::get('/login/admin', function () {
     return redirect()->route('login.index', ['role' => 'admin']);
@@ -98,4 +124,3 @@ Route::get('/login/dokter', function () {
 Route::get('/login/pasien', function () {
     return redirect()->route('login.index', ['role' => 'pasien']);
 })->name('pasien.login');
-
