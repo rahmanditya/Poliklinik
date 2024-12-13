@@ -82,7 +82,7 @@ php artisan migrate:fresh
 ```
 Seed tabel poli jika ingin praktis:
 ```bash
-php db:seed PoliSeeder
+php artisan db:seed PoliSeeder
 ```
 
 ### 8. Jalankan Server Backend secara Lokal
