@@ -12,6 +12,10 @@ use App\Models\Dokter;
 use App\Models\Pasien;
 use App\Models\Periksa;
 use App\Models\Schedule;
+use App\Models\Role;
+
+use Illuminate\Support\Facades\Log;
+
 
 class DokterController extends Controller
 {
@@ -21,17 +25,124 @@ class DokterController extends Controller
         return view('dokter.dashboard');
     }
 
-    public function indexJadwal()
-    {
-        $schedules = Schedule::all();
-        return view('dokter.schedule.index', compact('schedules'));
-    }
-    
     public function indexPeriksa()
     {
-        $periksa = Periksa::all();
-        return view('dokter.periksa.index', compact('periksa'));
+        // Get the currently authenticated dokter
+        $user = Auth::user();
+
+        $dokter = Dokter::where('user_id', $user->id)->first();
+
+        if (!$dokter) {
+            return abort(404, 'Dokter not found');
+        }
+
+        // Fetch daftar_poli records for the dokter, including related pasien and schedule data
+        $daftarPoli = DaftarPoli::with(['pasien', 'schedule', 'periksa'])
+            ->where('dokter_id', $dokter->id)
+            ->where('status', '!=', 'selesai')
+            ->get();
+
+
+        // Pass data to the view
+        // EDIT===
+
+        // {{ route('dokter.periksa.edit', $periksa->id) }}
+        // {{route('dokter.periksa.updateStatus', $periksa->id)}}
+        return view('dokter.periksa.index', compact('dokter', 'daftarPoli'));
     }
+
+    public function createPeriksa($daftarPoliId)
+    {
+        $user = Auth::user();
+
+        // Fetch the relevant daftar_poli entry
+        $daftarPoli = DaftarPoli::with(['pasien', 'dokter'])->findOrFail($daftarPoliId);
+
+        // Ensure the logged-in dokter is associated with this daftar_poli entry
+
+        $dokter = Dokter::where('user_id', $user->id)->first();
+
+        if ($daftarPoli->dokter_id !== $dokter->id) {
+            abort(403, 'Access denied.');
+        }
+
+        return view('dokter.periksa.create', compact('daftarPoli', 'dokter'));
+    }
+
+    public function storePeriksa(Request $request, $daftarPoliId)
+    {
+        $user = Auth::user();
+
+        // Validate the input
+        $validated = $request->validate([
+            'tgl_periksa' => 'required|date',
+            'catatan' => 'nullable|string',
+            'biaya_periksa' => 'nullable|numeric|min:0',
+        ]);
+
+        // Fetch the daftar_poli entry
+        $daftarPoli = DaftarPoli::findOrFail($daftarPoliId);
+
+
+        $dokter = Dokter::where('user_id', $user->id)->first();
+
+        if ($daftarPoli->dokter_id !== $dokter->id) {
+            abort(403, 'Access denied.');
+        }
+
+        // Create the periksa entry
+        $periksa = Periksa::create([
+            'daftar_poli_id' => $daftarPoli->id,
+            'dokter_id' => $dokter->id,
+            'tgl_periksa' => $validated['tgl_periksa'],
+            'catatan' => $validated['catatan'],
+            'biaya_periksa' => $validated['biaya_periksa'],
+        ]);
+
+        $daftarPoli->update(['status' => 'dalam_antrian']);
+
+        return redirect()->route('dokter.periksa.index')->with('success', 'Pasien berhasil diperiksa!');
+    }
+
+    public function updateStatus(Request $request, Periksa $periksa)
+    {
+        $newStatus = $request->input('status');
+
+        // Validate the status transition
+        if (!$periksa->canTransitionTo($newStatus)) {
+            return back()->withErrors(['error' => 'Invalid status transition.']);
+        }
+
+        // Update the status
+        $periksa->update(['status' => $newStatus]);
+
+        // Redirect with a success message
+        return redirect()->route('dokter.periksa.index')
+            ->with('success', 'Status berhasil diperbarui.');
+    }
+
+    public function detailPeriksa(Request $request, Periksa $periksa)
+    {
+        $validated = $request->validate([
+            'catatan' => 'nullable|string',
+            'biaya_obat' => 'nullable|numeric|min:0',
+        ]);
+
+        // Calculate the total cost
+        $totalBiaya = 150000 + ($validated['biaya_obat'] ?? 0);
+
+        // Update the periksa with the details
+        $periksa->update([
+            'catatan' => $validated['catatan'],
+            'biaya_total' => $totalBiaya,
+            'status' => Periksa::STATUS_SELESAI,
+        ]);
+
+        return redirect()->route('dokter.periksa.index')
+            ->with('success', 'Pasien berhasil diperiksa.');
+    }
+
+
 
     public function indexRiwayat()
     {
@@ -44,106 +155,4 @@ class DokterController extends Controller
         $profil = User::all();
         return view('dokter.profil.index', compact('profil'));
     }
-
-    public function createJadwal()
-    {
-        $user = Auth::user();
-
-        // Fetch all Poli along with their associated Dokters
-        $poli = Poli::with('dokters')->get();
-
-        // Collect all dokter IDs from all Poli
-        $dokterIds = $poli->flatMap(function ($poli) {
-            return $poli->dokters->pluck('id');
-        });
-
-        // Get schedules for these dokter IDs
-        $schedules = Schedule::whereIn('dokter_id', $dokterIds)->get();
-
-        // Fetch medical record number if user is a pasien
-        $medical_record_number = optional($user->pasien)->medical_record_number;
-
-        // Fetch all Dokters
-        $dokters = Dokter::all(); // Or whatever method you're using to get Dokters
-
-        // Pass the data to the view
-        return view('dokter.schedule.create', compact(
-            'poli',
-            'user',
-            'dokterIds',
-            'dokters' // Pass dokters to the view as well
-        ));
-    }
-
-
-
-    public function storeJadwal(Request $request)
-    {
-        // Validate the input
-        $request->validate([
-            'hari' => 'required|string|max:255',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
-            'date' => 'required|date',
-            'dokter' => 'required|exists:dokters,id',
-        ]);
-
-        $dokterId = $request->dokter;
-        $hari = $request->hari;
-        $date = $request->date;
-        $startTime = $request->start_time;
-        $endTime = $request->end_time;
-
-        // Check for overlapping schedules
-        $overlappingSchedules = Schedule::where('dokter_id', $dokterId)
-            ->where('hari', $hari)
-            ->where(function ($query) use ($startTime, $endTime) {
-                $query->where(function ($q) use ($startTime, $endTime) {
-                    $q->where('start_time', '<', $endTime)
-                        ->where('end_time', '>', $startTime);
-                });
-            })
-            ->exists();
-
-        if ($overlappingSchedules) {
-            return redirect()->back()->withErrors(['error' => 'Schedule overlaps with an existing one.']);
-        }
-
-        // Create new schedule
-        Schedule::insert([
-            'dokter_id' => $dokterId,
-            'hari' => $hari,
-            'date' => $date,
-            'start_time' => $startTime,
-            'end_time' => $endTime,
-        ]);
-
-        return redirect()->route('dokter.schedule.index')->with('success', 'Schedule created successfully.');
-    }
-
-    // public function createPeriksa($id)
-    // {
-    //     $poli = Poli::with(['dokters', 'periksa.pasien'])->findOrFail($id); // Ensure ID is numeric
-
-    //     $dokters = $poli->dokters;
-    //     $pasiens = Pasien::all();
-    //     $allDokters = Dokter::all();
-
-    //     return view('poli.tambah_periksa', compact('poli', 'dokters', 'pasiens', 'allDokters'));
-    // }
-
-    // public function storePeriksa(Request $request)
-    // {
-    //     $validated = $request->validate([
-    //         'specialization_id' => 'required|exists:poli,id',
-    //         'pasien_id' => 'required|exists:pasiens,id',
-    //         'jadwal_periksa_id' => 'nullable|exists:jadwal_periksa,id',
-    //         'keluhan' => 'nullable|string',
-    //     ]);
-
-    //     DaftarPoli::create($validated);
-
-    //     return redirect()->route('admin.poli.show')->with('success', 'Poli appointment created successfully!');
-
-    // }
 }

@@ -5,13 +5,18 @@ use App\Http\Controllers\AuthController;
 use App\Http\Middleware\RoleMiddleware;
 
 use App\Http\Controllers\AdminController;
+
+
 use App\Http\Controllers\DokterController;
+
 use App\Http\Controllers\PasienController;
 
 use App\Http\Controllers\Admin\AdminDokterController;
 use App\Http\Controllers\Admin\AdminPasienController;
 use App\Http\Controllers\Admin\AdminPoliController;
 use App\Http\Controllers\Admin\AdminObatController;
+
+use App\Http\Controllers\Dokter\ScheduleController;
 
 use Illuminate\Support\Facades\Auth;
 
@@ -86,13 +91,23 @@ Route::middleware(['auth', RoleMiddleware::class])->group(function () {
 Route::middleware(['auth', RoleMiddleware::class])->group(function () {
     Route::get('/dokter/dashboard', [DokterController::class, 'dashboard'])->name('dokter.dashboard');
 
-    Route::get('/dokter/schedule', [DokterController::class, 'indexJadwal'])->name('dokter.schedule.index');
-    Route::get('/dokter/schedule/create', [DokterController::class, 'createJadwal'])->name('dokter.schedule.create');
-    Route::post('/dokter/schedule', [DokterController::class, 'storeJadwal'])->name('dokter.schedule.store');
+    // JADWAL
+    Route::get('/dokter/schedule', [ScheduleController::class, 'index'])->name('dokter.schedule.index');
+    Route::get('/dokter/schedule/create', [ScheduleController::class, 'create'])->name('dokter.schedule.create');
+    Route::post('/dokter/schedule', [ScheduleController::class, 'store'])->name('dokter.schedule.store');
+    Route::get('/dokter/schedule/{schedule}/edit', [ScheduleController::class, 'edit'])->name('dokter.schedule.edit');
+    Route::put('/dokter/schedule/{schedule}', [ScheduleController::class, 'update'])->name('dokter.schedule.update');
 
-    Route::get('/dokter/periksa/', [DokterController::class, 'index'])->name('dokter.periksa.index');
-    Route::get('/dokter/periksa/{pasien}', [DokterController::class, 'show'])->name('dokter.periksa.show');
+    // PERIKSA
+    Route::get('/dokter/periksa/', [DokterController::class, 'indexPeriksa'])->name('dokter.periksa.index');
+    Route::get('/dokter/periksa/create/{daftarPoli}', [DokterController::class, 'createPeriksa'])->name('dokter.periksa.create');
+    Route::post('/dokter/periksa/store/{daftarPoli}', [DokterController::class, 'storePeriksa'])->name('dokter.periksa.store');
+    Route::get('/dokter/periksa/{pasien}/edit', [DokterController::class, 'editPeriksa'])->name('dokter.periksa.edit');
+    Route::put('/dokter/periksa/{pasien}', [DokterController::class, 'updateStatus'])->name('dokter.periksa.update');
+    Route::post('/dokter/periksa/{periksa}/detail', [DokterController::class, 'detailPeriksa'])->name('dokter.periksa.detail');
+    // RIWAYAT
     Route::get('/dokter/riwayat/', [DokterController::class, 'index'])->name('dokter.riwayat.index');
+    // PROFIL
     Route::get('/dokter/profil/', [DokterController::class, 'index'])->name('dokter.profil.index');
 
     Route::post('/dokter/logout', [AuthController::class, 'logout'])->name('dokter.logout');

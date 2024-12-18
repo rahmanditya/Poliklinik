@@ -38,7 +38,7 @@ class AdminPoliController extends Controller
             'name' => $request->input('name'),
         ]);
 
-        return redirect()->route('admin.poli.index')->with('success', 'Poli created successfully!');
+        return redirect()->route('admin.poli.index')->with('success', 'Poli berhasil ditambahkan');
     }
 
     public function edit($id)
@@ -62,7 +62,7 @@ class AdminPoliController extends Controller
         ]));
 
 
-        return redirect()->route('admin.poli.index')->with('success', 'Poli updated successfully.');
+        return redirect()->route('admin.poli.index')->with('success', 'Poli berhasi di update.');
     }
 
     public function show($id)

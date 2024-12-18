@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('dokters', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->unique()->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->string('email')->unique();
             $table->string('phone');

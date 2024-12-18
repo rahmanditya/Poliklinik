@@ -83,6 +83,6 @@ class User extends Authenticatable
 
     public function dokter()
     {
-        return $this->hasOne(Dokter::class, 'email');
+        return $this->hasOne(Dokter::class);
     }
 }

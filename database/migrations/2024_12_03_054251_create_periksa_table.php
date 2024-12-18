@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('daftar_poli_id')->constrained('daftar_poli')->onDelete('cascade'); // Tracks registration
             $table->foreignId('dokter_id')->nullable()->constrained('dokters')->onDelete('set null'); // Optional doctor
             $table->date('tgl_periksa');
-            $table->text('catatan')->nullable(); // Doctor's notes
+            $table->text('catatan')->nullable(); 
             $table->decimal('biaya_periksa', 10, 2)->nullable();
             $table->timestamps();
         });

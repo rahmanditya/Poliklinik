@@ -4,57 +4,261 @@
 
 @section('content')
 <main>
-    <div class="cards">
-        <div class="grid grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-4 sm:px-8">
-            <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-                <div class="p-4 bg-green-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                        </path>
-                    </svg></div>
-                <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Total Member</h3>
-                    <p class="text-3xl">12,768</p>
+    <!-- Stats Overview -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-blue-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Pasien Hari Ini</p>
+                    <h3 class="text-2xl font-bold text-gray-800">24</h3>
+                </div>
+                <div class="bg-blue-50 rounded-full p-3">
+                    <i class="fas fa-user-group text-blue-500 text-xl"></i>
                 </div>
             </div>
-            <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-                <div class="p-4 bg-blue-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2">
-                        </path>
-                    </svg></div>
-                <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Total Post</h3>
-                    <p class="text-3xl">39,265</p>
+            <p class="text-xs text-green-500 mt-2">
+                <i class="fas fa-arrow-up"></i> 12% dari kemarin
+            </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-green-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Sudah Diperiksa</p>
+                    <h3 class="text-2xl font-bold text-gray-800">18</h3>
+                </div>
+                <div class="bg-green-50 rounded-full p-3">
+                    <i class="fas fa-check-circle text-green-500 text-xl"></i>
                 </div>
             </div>
-            <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-                <div class="p-4 bg-indigo-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z">
-                        </path>
-                    </svg></div>
-                <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Total Comment</h3>
-                    <p class="text-3xl">142,334</p>
+            <div class="w-full bg-gray-200 rounded-full h-2.5 mt-3">
+                <div class="bg-green-500 h-2.5 rounded-full" style="width: 75%"></div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-yellow-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Dalam Antrian</p>
+                    <h3 class="text-2xl font-bold text-gray-800">6</h3>
+                </div>
+                <div class="bg-yellow-50 rounded-full p-3">
+                    <i class="fas fa-clock text-yellow-500 text-xl"></i>
                 </div>
             </div>
-            <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-                <div class="p-4 bg-red-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4">
-                        </path>
-                    </svg></div>
-                <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Server Load</h3>
-                    <p class="text-3xl">34.12%</p>
+            <p class="text-xs text-yellow-500 mt-2">
+                Estimasi waktu tunggu: 45 menit
+            </p>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm p-6 border-l-4 border-purple-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Rata-rata Waktu</p>
+                    <h3 class="text-2xl font-bold text-gray-800">18m</h3>
+                </div>
+                <div class="bg-purple-50 rounded-full p-3">
+                    <i class="fas fa-stopwatch text-purple-500 text-xl"></i>
+                </div>
+            </div>
+            <p class="text-xs text-purple-500 mt-2">
+                Per pasien hari ini
+            </p>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Current Patient Card -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Pasien Saat Ini</h2>
+                    <span class="px-4 py-2 bg-green-100 text-green-800 rounded-full text-sm">
+                        Dalam Pemeriksaan
+                    </span>
+                </div>
+                <div class="flex items-center space-x-4 mb-6">
+                    <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&h=150&fit=crop"
+                        class="w-16 h-16 rounded-full" alt="Patient">
+                    <div>
+                        <h3 class="font-semibold text-lg">Sarah Johnson</h3>
+                        <p class="text-gray-500">32 tahun • Wanita</p>
+                        <p class="text-sm text-blue-500">Keluhan: Nyeri dada dan sesak napas</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-3 gap-4 mb-6">
+                    <div class="border rounded-lg p-3">
+                        <p class="text-sm text-gray-500">Tekanan Darah</p>
+                        <p class="font-semibold">120/80 mmHg</p>
+                    </div>
+                    <div class="border rounded-lg p-3">
+                        <p class="text-sm text-gray-500">Detak Jantung</p>
+                        <p class="font-semibold">85 bpm</p>
+                    </div>
+                    <div class="border rounded-lg p-3">
+                        <p class="text-sm text-gray-500">Suhu Tubuh</p>
+                        <p class="font-semibold">36.5°C</p>
+                    </div>
+                </div>
+                <div class="flex space-x-3">
+                    <button class="flex-1 bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 transition-colors">
+                        Catat Pemeriksaan
+                    </button>
+                    <button class="flex-1 border border-gray-300 py-2 px-4 rounded-lg hover:bg-gray-50 transition-colors">
+                        Riwayat Medis
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Queue List -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-6">Antrian Berikutnya</h2>
+            <div class="space-y-4">
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-lg font-bold text-blue-500">1</span>
+                        <div>
+                            <h4 class="font-medium">John Smith</h4>
+                            <p class="text-sm text-gray-500">09:30 AM</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                        Menunggu
+                    </span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-lg font-bold text-blue-500">2</span>
+                        <div>
+                            <h4 class="font-medium">Emma Davis</h4>
+                            <p class="text-sm text-gray-500">10:00 AM</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                        Menunggu
+                    </span>
+                </div>
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-lg font-bold text-blue-500">3</span>
+                        <div>
+                            <h4 class="font-medium">Michael Brown</h4>
+                            <p class="text-sm text-gray-500">10:30 AM</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm">
+                        Menunggu
+                    </span>
+                </div>
+            </div>
+            <button class="w-full mt-6 text-blue-500 hover:text-blue-600 text-sm font-medium">
+                Lihat Semua Antrian →
+            </button>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="lg:col-span-3">
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Aktivitas Terakhir</h2>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-1 border rounded-lg hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-filter mr-2"></i> Filter
+                        </button>
+                        <button class="px-3 py-1 border rounded-lg hover:bg-gray-50 transition-colors">
+                            <i class="fas fa-download mr-2"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="border-b">
+                                <th class="text-left py-3 px-4">Waktu</th>
+                                <th class="text-left py-3 px-4">Pasien</th>
+                                <th class="text-left py-3 px-4">Tindakan</th>
+                                <th class="text-left py-3 px-4">Status</th>
+                                <th class="text-left py-3 px-4">Detail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">09:15 AM</td>
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?w=50&h=50&fit=crop"
+                                            class="w-8 h-8 rounded-full">
+                                        <span>Robert Chen</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">Pemeriksaan Rutin</td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                                        Selesai
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-500 hover:text-blue-700">Lihat</button>
+                                </td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-3 px-4">08:45 AM</td>
+                                <td class="py-3 px-4">
+                                    <div class="flex items-center space-x-3">
+                                        <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=50&h=50&fit=crop"
+                                            class="w-8 h-8 rounded-full">
+                                        <span>Maria Garcia</span>
+                                    </div>
+                                </td>
+                                <td class="py-3 px-4">Konsultasi</td>
+                                <td class="py-3 px-4">
+                                    <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-sm">
+                                        Selesai
+                                    </span>
+                                </td>
+                                <td class="py-3 px-4">
+                                    <button class="text-blue-500 hover:text-blue-700">Lihat</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add hover effect to cards
+        const cards = document.querySelectorAll('.rounded-xl');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('hover:shadow-md');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('hover:shadow-md');
+            });
+        });
+
+        // Animate number counters
+        const numbers = document.querySelectorAll('.text-2xl');
+        numbers.forEach(number => {
+            const finalValue = parseInt(number.textContent);
+            let currentValue = 0;
+            const increment = finalValue / 20;
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= finalValue) {
+                    clearInterval(timer);
+                    number.textContent = finalValue;
+                } else {
+                    number.textContent = Math.round(currentValue);
+                }
+            }, 50);
+        });
+    });
+</script>
 @endsection

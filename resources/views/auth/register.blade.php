@@ -148,7 +148,7 @@
             <div class="text-center mt-6">
                 <p class="text-sm text-gray-600">
                     Sudah punya akun?
-                    <a href="{{ route('login', ['role' => 'pasien']) }}"
+                    <a href="{{ route('login.index', ['role' => 'pasien']) }}"
                         class="font-medium text-indigo-600 hover:text-indigo-500 transition-colors duration-300">
                         Login di sini
                     </a>

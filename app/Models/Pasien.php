@@ -12,6 +12,7 @@ class Pasien extends Model
     protected $table = 'pasiens';
 
     protected $fillable = [
+        'user_id',
         'medical_record_number',
         'name',
         'email',
@@ -21,10 +22,10 @@ class Pasien extends Model
         'password',
         
     ];
-
+    
     public function user()
     {
-        return $this->hasOne(User::class, 'email', 'email'); // Matches Pasien's email with User's email
+        return $this->belongsTo(User::class);
     }
 
     public function periksa()

@@ -40,7 +40,7 @@ class AdminObatController extends Controller
             'harga'
         ]));
 
-        return redirect()->route('admin.obat.index')->with('success', 'Obat created successfully with login access.');
+        return redirect()->route('admin.obat.index')->with('success', 'Obat berhasil ditambahkan');
     }
 
 

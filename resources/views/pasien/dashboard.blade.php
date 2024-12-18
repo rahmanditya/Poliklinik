@@ -3,58 +3,266 @@
 @section('title', 'Pasien Dashboard')
 
 @section('content')
+
 <main>
-    <div class="cards">
-        <div class="grid grid-cols-1 gap-4 px-4 mt-8 sm:grid-cols-4 sm:px-8">
-            <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-                <div class="p-4 bg-green-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
-                        </path>
-                    </svg></div>
-                <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Total Member</h3>
-                    <p class="text-3xl">12,768</p>
+    <!-- Welcome Banner -->
+    <div class="bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg mb-6 p-6">
+        <div class="flex items-center justify-between">
+            <div class="text-white">
+                <h1 class="text-2xl font-bold mb-2">Selamat Datang, {{ $user->name ?? 'Tidak Diketahui' }}!</h1>
+                <p class="opacity-90">Jadwal pemeriksaan berikutnya: 15 Maret 2024, 09:30</p>
+            </div>
+            <div class="hidden md:flex items-center space-x-3">
+                <button class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors">
+                    <i class="fas fa-calendar-plus mr-2"></i>Buat Janji
+                </button>
+                <button class="bg-blue-400 text-white px-4 py-2 rounded-lg hover:bg-blue-500 transition-colors">
+                    <i class="fas fa-phone mr-2"></i>Bantuan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer border-l-4 border-emerald-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">No. Antrian Anda</p>
+                    <h3 class="text-2xl font-bold text-gray-800">05</h3>
+                    <p class="text-xs text-emerald-500 mt-1">Estimasi: 25 menit</p>
+                </div>
+                <div class="bg-emerald-50 rounded-full p-3">
+                    <i class="fas fa-ticket text-emerald-500 text-xl"></i>
                 </div>
             </div>
-            <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-                <div class="p-4 bg-blue-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2">
-                        </path>
-                    </svg></div>
-                <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Total Post</h3>
-                    <p class="text-3xl">39,265</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer border-l-4 border-purple-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Resep Aktif</p>
+                    <h3 class="text-2xl font-bold text-gray-800">2</h3>
+                    <p class="text-xs text-purple-500 mt-1">Perlu perpanjangan</p>
+                </div>
+                <div class="bg-purple-50 rounded-full p-3">
+                    <i class="fas fa-prescription text-purple-500 text-xl"></i>
                 </div>
             </div>
-            <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-                <div class="p-4 bg-indigo-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z">
-                        </path>
-                    </svg></div>
-                <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Total Comment</h3>
-                    <p class="text-3xl">142,334</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer border-l-4 border-orange-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Hasil Lab</p>
+                    <h3 class="text-2xl font-bold text-gray-800">3</h3>
+                    <p class="text-xs text-orange-500 mt-1">1 hasil baru</p>
+                </div>
+                <div class="bg-orange-50 rounded-full p-3">
+                    <i class="fas fa-flask text-orange-500 text-xl"></i>
                 </div>
             </div>
-            <div class="flex items-center bg-white border rounded-sm overflow-hidden shadow">
-                <div class="p-4 bg-red-400"><svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-white" fill="none"
-                        viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4">
-                        </path>
-                    </svg></div>
-                <div class="px-4 text-gray-700">
-                    <h3 class="text-sm tracking-wider">Server Load</h3>
-                    <p class="text-3xl">34.12%</p>
+        </div>
+
+        <div class="bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-all cursor-pointer border-l-4 border-blue-500">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500">Tagihan</p>
+                    <h3 class="text-2xl font-bold text-gray-800">0</h3>
+                    <p class="text-xs text-blue-500 mt-1">Semua lunas</p>
+                </div>
+                <div class="bg-blue-50 rounded-full p-3">
+                    <i class="fas fa-receipt text-blue-500 text-xl"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Upcoming Appointments -->
+        <div class="lg:col-span-2">
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Jadwal Pemeriksaan</h2>
+                    <button class="text-blue-500 hover:text-blue-700">
+                        Lihat Semua
+                    </button>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-100">
+                        <div class="bg-blue-500 text-white rounded-lg p-3 mr-4">
+                            <i class="fas fa-user-doctor text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold">Dr. Sarah Wilson</h4>
+                            <p class="text-sm text-gray-500">Pemeriksaan Rutin</p>
+                            <p class="text-xs text-blue-500 mt-1">15 Maret 2024 • 09:30 AM</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">
+                                Reschedule
+                            </button>
+                            <button class="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                Konfirmasi
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <div class="bg-purple-500 text-white rounded-lg p-3 mr-4">
+                            <i class="fas fa-tooth text-xl"></i>
+                        </div>
+                        <div class="flex-1">
+                            <h4 class="font-semibold">Dr. John Doe</h4>
+                            <p class="text-sm text-gray-500">Pemeriksaan Gigi</p>
+                            <p class="text-xs text-gray-500 mt-1">22 Maret 2024 • 14:00 PM</p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">
+                                Reschedule
+                            </button>
+                            <button class="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                                Konfirmasi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Prescriptions -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800">Resep Aktif</h2>
+                <button class="text-blue-500 hover:text-blue-700">
+                    Riwayat Resep
+                </button>
+            </div>
+            <div class="space-y-4">
+                <div class="p-4 border rounded-lg">
+                    <div class="flex justify-between items-start mb-3">
+                        <h4 class="font-semibold">Amoxicillin</h4>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Aktif</span>
+                    </div>
+                    <p class="text-sm text-gray-500">500mg - 3x sehari</p>
+                    <p class="text-xs text-gray-400 mt-1">Diresepkan oleh Dr. Sarah Wilson</p>
+                    <div class="mt-3 flex justify-between items-center">
+                        <p class="text-xs text-orange-500">Sisa: 5 hari</p>
+                        <button class="text-sm text-blue-500 hover:text-blue-700">Perpanjang</button>
+                    </div>
+                </div>
+
+                <div class="p-4 border rounded-lg">
+                    <div class="flex justify-between items-start mb-3">
+                        <h4 class="font-semibold">Paracetamol</h4>
+                        <span class="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs">Aktif</span>
+                    </div>
+                    <p class="text-sm text-gray-500">500mg - jika diperlukan</p>
+                    <p class="text-xs text-gray-400 mt-1">Diresepkan oleh Dr. Sarah Wilson</p>
+                    <div class="mt-3 flex justify-between items-center">
+                        <p class="text-xs text-orange-500">Sisa: 10 hari</p>
+                        <button class="text-sm text-blue-500 hover:text-blue-700">Perpanjang</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Health Metrics -->
+        <div class="lg:col-span-3">
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Metrik Kesehatan</h2>
+                    <div class="flex space-x-2">
+                        <button class="px-3 py-1 text-sm border rounded-lg hover:bg-gray-50">
+                            Minggu Ini
+                        </button>
+                        <button class="px-3 py-1 text-sm border rounded-lg hover:bg-gray-50">
+                            <i class="fas fa-download mr-1"></i> Export
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="p-4 border rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-gray-500">Tekanan Darah</p>
+                            <i class="fas fa-heart text-red-500"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">120/80</h3>
+                        <p class="text-xs text-green-500 mt-1">
+                            <i class="fas fa-arrow-up"></i> Normal
+                        </p>
+                    </div>
+
+                    <div class="p-4 border rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-gray-500">Berat Badan</p>
+                            <i class="fas fa-weight-scale text-blue-500"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">65 kg</h3>
+                        <p class="text-xs text-blue-500 mt-1">
+                            <i class="fas fa-minus"></i> Stabil
+                        </p>
+                    </div>
+
+                    <div class="p-4 border rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-gray-500">Gula Darah</p>
+                            <i class="fas fa-droplet text-purple-500"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">95</h3>
+                        <p class="text-xs text-green-500 mt-1">
+                            <i class="fas fa-check"></i> Normal
+                        </p>
+                    </div>
+
+                    <div class="p-4 border rounded-lg">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-gray-500">Kolesterol</p>
+                            <i class="fas fa-chart-line text-yellow-500"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold">180</h3>
+                        <p class="text-xs text-yellow-500 mt-1">
+                            <i class="fas fa-exclamation-triangle"></i> Perlu Perhatian
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate numbers
+        const numbers = document.querySelectorAll('.text-2xl');
+        numbers.forEach(number => {
+            const finalValue = parseInt(number.textContent);
+            if (!isNaN(finalValue)) {
+                let currentValue = 0;
+                const increment = finalValue / 20;
+                const timer = setInterval(() => {
+                    currentValue += increment;
+                    if (currentValue >= finalValue) {
+                        clearInterval(timer);
+                        number.textContent = finalValue;
+                    } else {
+                        number.textContent = Math.round(currentValue);
+                    }
+                }, 50);
+            }
+        });
+
+        // Add hover effects to cards
+        const cards = document.querySelectorAll('.rounded-xl');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.classList.add('hover:shadow-md');
+            });
+            card.addEventListener('mouseleave', () => {
+                card.classList.remove('hover:shadow-md');
+            });
+        });
+    });
+</script>
 @endsection

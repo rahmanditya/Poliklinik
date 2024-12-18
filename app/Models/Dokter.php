@@ -12,6 +12,7 @@ class Dokter extends Model
     protected $table = 'dokters';
 
     protected $fillable = [
+        'user_id',  
         'name',
         'email',
         'phone',
@@ -41,7 +42,7 @@ class Dokter extends Model
     
     public function user()
     {
-        return $this->hasOne(User::class, 'email', 'email'); // Matches Pasien's email with User's email
+        return $this->belongsTo(User::class);
     }
 
 }

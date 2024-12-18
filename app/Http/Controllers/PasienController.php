@@ -35,14 +35,20 @@ class PasienController extends Controller
         }
 
         $user = Auth::user();
+        $pasien = Pasien::where('user_id', $user->id)->first();
+
+        if ($pasien->user_id !== $user->id) {
+            abort(403, 'Access denied. You are not authorized to view this resource.');
+        }
         $poli = Poli::with('dokters')->findOrFail($id);
+        
         $dokterIds = $poli->dokters->pluck('id');
+
         $schedules = Schedule::whereIn('dokter_id', $dokterIds)->get();
+
         $medical_record_number = optional($user->pasien)->medical_record_number;
+        
         $dokters = $poli->dokters;
-
-        // dd($user->pasien->daftarPoli);
-
 
 
         return view('pasien.poli.show', compact(
@@ -54,6 +60,45 @@ class PasienController extends Controller
         ));
     }
 
+    // public function show($id)
+    // {
+
+    //     $user = Auth::user();
+
+    //     if (!$user) {
+    //         return abort(404, 'User not found');
+    //     }
+
+    //     if ($user->role_id != 2) {
+    //         return abort(403, 'Access denied');
+    //     }
+
+    //     $pasien = Pasien::where('user_id', $user->id)->first(); 
+
+    //     $poli = Poli::where('dokter_id', $dokter->id)->get();
+
+    //     // Ensure the user has access to this resource (if applicable, customize this logic as needed)
+    //     if ($pasien->user_id !== $user->id) {
+    //         abort(403, 'Access denied. You are not authorized to view this resource.');
+    //     }
+
+    //     // Get related dokters and their schedules
+    //     $dokterIds = $poli->dokters->pluck('id');
+    //     $schedules = Schedule::whereIn('dokter_id', $dokterIds)->get();
+
+    //     // Get the user's medical record number (if applicable)
+    //     $medical_record_number = optional($user->pasien)->medical_record_number;
+
+    //     // Return the view with the data
+    //     return view('pasien.poli.show', compact(
+    //         'poli',
+    //         'dokters',
+    //         'schedules',
+    //         'medical_record_number',
+    //         'user'
+    //     ));
+    // }
+
 
     public function store(Request $request)
     {
@@ -64,12 +109,10 @@ class PasienController extends Controller
             'keluhan' => 'required'
         ]);
 
-        // Get the latest queue number for this schedule
         $latestQueue = DaftarPoli::where('schedule_id', $request->schedule_id)
             ->orderBy('no_antrian', 'desc')
             ->first();
 
-        // Set queue number
         $queueNumber = $latestQueue ? $latestQueue->no_antrian + 1 : 1;
 
         try {

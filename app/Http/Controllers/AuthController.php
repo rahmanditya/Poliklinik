@@ -31,35 +31,21 @@ class AuthController extends Controller
 
     public function post(Request $request)
     {
-        // Validate the input fields
         $request->validate([
-            'medical_record_number' => 'required',
-            'name' => 'required',
+            'medical_record_number' => 'required|string|unique:pasiens,medical_record_number',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required',
+            'phone' => 'required|string|max:20',
             'date_of_birth' => 'required|date',
-            'address' => 'required',
-            'password' => 'required|min:6|confirmed', // Password must be confirmed
+            'address' => 'required|string|max:255',
+            'password' => 'required|min:6|confirmed', 
         ]);
 
-        // Create the `pasien` record
-        $pasien = Pasien::create($request->only([
-            'medical_record_number',
-            'name',
-            'email',
-            'phone',
-            'date_of_birth',
-            'address',
-        ]));
-
-        // Hash the password
         $hashedPassword = bcrypt($request->password);
 
-        // Get the role ID for 'pasien'
         $role = DB::selectOne("SELECT id FROM roles WHERE role_code = 'pasien'");
 
-        // Create the user record
-        DB::table("users")->insert([
+        $userId = DB::table("users")->insertGetId([
             "name" => $request->name,
             "email" => $request->email,
             "password" => $hashedPassword,
@@ -69,10 +55,20 @@ class AuthController extends Controller
             "updated_at" => now(),
         ]);
 
-        // Redirect to the login page with success message
+        Pasien::create([
+            'user_id' => $userId, 
+            'medical_record_number' => $request->medical_record_number,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'date_of_birth' => $request->date_of_birth,
+            'address' => $request->address,
+        ]);
+
         return redirect()->route('login.index', ['role' => 'pasien'])
-            ->with('success', 'Registration successful! Please login.');
+            ->with('success', 'Registration successful! Please log in.');
     }
+
 
 
 

@@ -30,33 +30,35 @@ class AdminDokterController extends Controller
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:dokters,email',
+            'email' => 'required|email|unique:dokters,email|unique:users,email', // Ensure email is unique in both tables
             'phone' => 'required|string|max:20',
             'status' => 'nullable|string|max:255',
             'specialization_id' => 'required|exists:poli,id',
         ]);
 
-
-        $dokter = Dokter::create($request->only([
-            'name',
-            'email',
-            'phone',
-            'status',
-            'specialization_id'
-        ]));
-
         $password = bcrypt('123123123');
         $role = DB::selectOne("SELECT id FROM roles WHERE role_code = 'dokter'");
-        DB::table("users")->insert([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => $password,
-            "role_id" => $role->id,
-            "status_code" => 'user_active'
+        $user = DB::table('users')->insertGetId([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $password,
+            'role_id' => $role->id,
+            'status_code' => 'user_active',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
-        return redirect()->route('admin.dokter.index')->with('success', 'Dokter created successfully with login access.');
-    }
 
+        $dokter = Dokter::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'status' => $request->status ?? 'Tersedia',
+            'specialization_id' => $request->specialization_id,
+            'user_id' => $user, 
+        ]);
+
+        return redirect()->route('admin.dokter.index')->with('success', 'Dokter berhasil ditambahkan.');
+    }
 
     public function show($id)
     {
@@ -73,7 +75,7 @@ class AdminDokterController extends Controller
         $specializations = Poli::all();
         $dokters = Dokter::with('specialization')->get();
         $dokter = Dokter::findOrFail($id);
-        $polis = Poli::all(); 
+        $polis = Poli::all();
         return view('admin.dokter.edit', compact('dokter', 'polis', 'dokters', 'specializations'));
     }
 
@@ -83,7 +85,7 @@ class AdminDokterController extends Controller
 
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => "required|email|unique:dokters,email,{$dokter->id}", 
+            'email' => "required|email|unique:dokters,email,{$dokter->id}|unique:users,email,{$dokter->user_id}",
             'phone' => 'required|string|max:20',
             'status' => 'nullable|string|max:255',
             'specialization_id' => 'required|exists:poli,id',
@@ -98,16 +100,15 @@ class AdminDokterController extends Controller
         ]));
 
         DB::table('users')
-            ->where('email', $dokter->email) 
+            ->where('id', $dokter->user_id)
             ->update([
                 'name' => $request->name,
                 'email' => $request->email,
+                'updated_at' => now(),
             ]);
 
         return redirect()->route('admin.dokter.index')->with('success', 'Dokter updated successfully.');
     }
-
-
 
     public function destroy($id)
     {
@@ -115,5 +116,4 @@ class AdminDokterController extends Controller
         $dokter->delete();
         return redirect()->route('admin.dokter.index')->with('success', 'Dokter deleted successfully');
     }
-
 }

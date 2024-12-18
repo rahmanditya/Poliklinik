@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Pasien;
-use App\Models\User;
+
 use Illuminate\Support\Facades\DB;
 
 class AdminPasienController extends Controller
@@ -24,34 +24,39 @@ class AdminPasienController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'medical_record_number' => 'required',
-            'name' => 'required',
+            'medical_record_number' => 'required|string|unique:pasiens,medical_record_number',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'phone' => 'required',
+            'phone' => 'required|string|max:20',
             'date_of_birth' => 'required|date',
-            'address' => 'required',
+            'address' => 'required|string|max:255',
         ]);
-
-        $pasien = Pasien::create($request->only([
-            'medical_record_number',
-            'name',
-            'email',
-            'phone',
-            'date_of_birth',
-            'address'
-        ]));
 
         $password = bcrypt('123123123'); 
-        $role = DB::selectOne("SELECT id FROM roles WHERE role_code = 'pasien'");
-        DB::table("users")->insert([
-            "name" => $request->name,
-            "email" => $request->email,
-            "password" => $password,
-            "role_id" => $role->id,
-            "status_code" => 'user_active'
+        $role = DB::selectOne("SELECT id FROM roles WHERE role_code = 'pasien'"); 
+        $user = DB::table('users')->insertGetId([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => $password,
+            'role_id' => $role->id,
+            'status_code' => 'user_active',
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
-        return redirect()->route('admin.pasien.index')->with('success', 'Pasien created successfully with login access.');
+
+        $pasien = Pasien::create([
+            'user_id' => $user, 
+            'medical_record_number' => $request->medical_record_number,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'date_of_birth' => $request->date_of_birth,
+            'address' => $request->address,
+        ]);
+
+        return redirect()->route('admin.pasien.index')->with('success', 'Pasien berhasil ditambahkan.');
     }
+
 
     public function show($id)
     {
@@ -71,14 +76,15 @@ class AdminPasienController extends Controller
 
     public function update(Request $request, $id)
     {
+        $pasien = Pasien::findOrFail($id);
+
         $request->validate([
             'name' => 'required',
-            'email' => 'required',
+            'email' => "required|email|unique:dokters,email,{$pasien->id}|unique:users,email,{$pasien->user_id}",
             'phone' => 'required',
             'address' => 'required',
         ]);
 
-        $pasien = Pasien::findOrFail($id);
         $pasien->update($request->all());
         return redirect()->route('admin.pasien.index')->with('success', 'Pasien updated successfully');
     }

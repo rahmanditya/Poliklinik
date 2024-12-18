@@ -38,6 +38,11 @@ class DaftarPoli extends Model
         return $this->belongsTo(Pasien::class);
     }
 
+    public function poli()
+    {
+        return $this->belongsTo(Poli::class, 'specialization_id');
+    }
+
     // public function dokter(): BelongsTo
     // {
     //     return $this->belongsTo(Dokter::class);
@@ -51,6 +56,11 @@ class DaftarPoli extends Model
     public function jadwalPeriksa(): BelongsTo
     {
         return $this->belongsTo(Schedule::class);
+    }
+
+    public function periksa(): BelongsTo
+    {
+        return $this->belongsTo(Periksa::class);
     }
 
     public function schedule()
