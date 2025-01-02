@@ -26,6 +26,23 @@ Sebelum menjalankan proyek ini, pastikan komputer Anda memiliki:
 
 Ikuti langkah-langkah berikut untuk mengkloning dan menjalankan proyek ini di komputer Anda:
 
+### LOGIN ADMIN, DOKTER, PASIEN Menggunakan Email dan Password default
+Admin :
+```bash
+admin@mail.com
+123123123
+```
+Dokter :
+```bash
+Email sesuai dengan email yang ditambah admin
+123123123
+```
+Pasien :
+```bash
+Email sesuai email pendaftaran
+123123123
+```
+
 ### 1. Kloning Repository
 Buka terminal dan jalankan perintah berikut:
 ```bash
