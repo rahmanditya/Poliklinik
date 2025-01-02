@@ -98,9 +98,14 @@ Migrasikan tabel dan isi data awal:
 ```bash
 php artisan migrate:fresh
 ```
-Seed tabel poli jika ingin praktis:
+Seed tabel poli:
 ```bash
 php artisan db:seed PoliSeeder
+```
+
+Seed tabel obat:
+```bash
+php artisan db:seed ObatSeeder
 ```
 
 ### 8. Jalankan Server Backend secara Lokal
