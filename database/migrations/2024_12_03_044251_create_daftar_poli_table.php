@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('schedule_id')->nullable()->constrained('schedules')->onDelete('set null');
             $table->integer('no_antrian')->nullable();
             $table->text('keluhan')->nullable();
-            $table->enum('status', ['selesai', 'dalam_antrian', 'menunggu'])->default('menunggu'); // Add status column
+            $table->enum('status', ['selesai', 'dalam_antrian', 'menunggu'])->default('dalam_antrian'); // Add status column
             $table->timestamps();
         });
     }

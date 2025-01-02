@@ -1,6 +1,6 @@
 @extends('layouts.dokter')
 
-@section('title', 'Create Schedule')
+@section('title', 'Buat Jadwal')
 
 @section('content')
 <div class="min-h-screen bg-gray-50 py-8">
@@ -8,7 +8,7 @@
         <div class="bg-white rounded-lg shadow-lg overflow-hidden">
             <!-- Header -->
             <div class="px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700">
-                <h1 class="text-2xl font-bold text-white">Create Schedule</h1>
+                <h1 class="text-2xl font-bold text-white">Buat Jadwal</h1>
             </div>
 
             <!-- Form Content -->
@@ -40,10 +40,10 @@
 
                     <!-- Day Selection -->
                     <div class="mb-6">
-                        <label for="hari" class="block text-sm font-medium text-gray-700">Day of Week</label>
+                        <label for="hari" class="block text-sm font-medium text-gray-700">Hari</label>
                         <select id="hari" name="hari" required
                             class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 rounded-md">
-                            <option value="">Select a day</option>
+                            <option value="">Pilih Hari</option>
                             <option value="Senin">Senin</option>
                             <option value="Selasa">Selasa</option>
                             <option value="Rabu">Rabu</option>
@@ -59,13 +59,13 @@
                     <!-- Time Range -->
                     <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <div>
-                            <label for="start_time" class="block text-sm font-medium text-gray-700">Start Time</label>
+                            <label for="start_time" class="block text-sm font-medium text-gray-700">Jam Mulai</label>
                             <input type="time" id="start_time" name="start_time" required
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
 
                         <div>
-                            <label for="end_time" class="block text-sm font-medium text-gray-700">End Time</label>
+                            <label for="end_time" class="block text-sm font-medium text-gray-700">Jam Selesai</label>
                             <input type="time" id="end_time" name="end_time" required
                                 class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500">
                         </div>
@@ -85,27 +85,27 @@
                                 </span>
                             </button>
                             <input type="hidden" name="is_active" id="is_active" value="0">
-                            <span class="ml-3 text-sm font-medium text-gray-900" id="status-label">Inactive</span>
+                            <span class="ml-3 text-sm font-medium text-gray-900" id="status-label">Tidak Aktif</span>
                         </div>
                     </div>
 
                     <!-- Notes -->
                     <div class="mt-6">
-                        <label for="notes" class="block text-sm font-medium text-gray-700">Notes</label>
+                        <label for="notes" class="block text-sm font-medium text-gray-700">Catatan</label>
                         <textarea id="notes" name="notes" rows="3"
                             class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Add any additional notes about this schedule..."></textarea>
+                            placeholder="Buat catatan ketika membuat jadwal..."></textarea>
                     </div>
 
                     <!-- Action Buttons -->
                     <div class="mt-6 flex justify-end space-x-3">
                         <a href="{{ route('dokter.schedule.index') }}"
                             class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Cancel
+                            Batal
                         </a>
                         <button type="submit"
                             class="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Create Schedule
+                            Buat Jadwal
                         </button>
                     </div>
                 </form>
@@ -128,13 +128,13 @@
             toggle.classList.add('bg-blue-600');
             button.classList.add('translate-x-5');
             input.value = '1';
-            label.textContent = 'Active';
+            label.textContent = 'Aktif';
         } else {
             toggle.classList.remove('bg-blue-600');
             toggle.classList.add('bg-gray-200');
             button.classList.remove('translate-x-5');
             input.value = '0';
-            label.textContent = 'Inactive';
+            label.textContent = 'Tidak Aktif';
         }
     }
 </script>

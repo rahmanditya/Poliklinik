@@ -1333,3 +1333,74 @@ header.animated {
     transform: translateY(-2px);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
+
+
+/* =====================================PROFIL DOKTER===================================== */
+
+.alert-success {
+    @apply bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 mx-8 mt-6 rounded;
+    animation: slideIn 0.3s ease-out;
+}
+
+.alert-error {
+    @apply bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 mx-8 mt-6 rounded;
+    animation: slideIn 0.3s ease-out;
+}
+
+.dokter-profil {
+    @apply relative;
+}
+
+.dokter-profil label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+}
+
+.dokter-profil input,
+.dokter-profil select {
+    @apply block w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200;
+}
+
+.dokter-profil input:hover,
+.dokter-profil select:hover {
+    @apply border-gray-400;
+}
+
+.dokter-profil small {
+    @apply block mt-1 text-sm text-gray-500;
+}
+
+.submit-button {
+    @apply inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg 
+    shadow-md hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 
+    transition-all duration-200 space-x-2;
+}
+
+.button-icon {
+    @apply w-5 h-5 ml-2;
+}
+
+.password-strength {
+    @apply h-1 mt-2 rounded-full overflow-hidden bg-gray-200;
+}
+
+/* Animations */
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.dokter-profil input:focus + label,
+.dokter-profil select:focus + label {
+    @apply text-blue-600;
+}
+
+/* Password Strength Indicator */
+.strength-weak { @apply bg-red-500; width: 33.33%; }
+.strength-medium { @apply bg-yellow-500; width: 66.66%; }
+.strength-strong { @apply bg-green-500; width: 100%; }

@@ -4,8 +4,7 @@
 
 @section('content')
 
-
-<div class="min-h-screen bg-gray-50 py-6">
+<main>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header Section -->
         <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
@@ -41,7 +40,7 @@
                                 {{ $periksa->pasien->name ?? 'N/A' }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ ucfirst($periksa->schedule->hari) }} ({{ $periksa->schedule->start_time}} - {{$periksa->schedule->end_time}} )
+                                {{ ucfirst($periksa->schedule->hari) }} ({{ $periksa->schedule->start_time->format('H:i')}} - {{$periksa->schedule->end_time->format('H:i')}} )
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-900">
                                 <div class="max-w-xs truncate">
@@ -50,14 +49,14 @@
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    {{ $periksa->status === 'menunggu' ? 'bg-yellow-100 text-yellow-800' : 
+                                    {{ $periksa->status === 'dalam_antrian' ? 'bg-yellow-100 text-yellow-800' : 
                                        ($periksa->status === 'dalam_antrian' ? 'bg-blue-100 text-blue-800' : 
                                        'bg-green-100 text-green-800') }}">
                                     {{ ucfirst($periksa->status) }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                @if ($periksa->status === 'menunggu')
+                                @if ($periksa->status === 'dalam_antrian')
                                 <a href="{{ route('dokter.periksa.create', $periksa->id) }}"
                                     class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
                                     Periksa
@@ -97,7 +96,7 @@
             </div>
         </div>
     </div>
-</div>
+</main>
 
 <!-- Modal -->
 <div id="detailModal" class="fixed inset-0 z-50 hidden">
@@ -118,20 +117,30 @@
                 <form id="periksaForm" method="POST">
                     @csrf
                     <div class="space-y-4">
+                        <!-- Hidden input for ID -->
+                        <input type="hidden" name="id" value="{{ $id ?? '' }}">
+
+                        <!-- Catatan -->
                         <div>
-                            <label for="catatan" class="block text-sm font-medium text-gray-700">Catatan Obat</label>
+                            <label for="catatan" class="block text-sm font-medium text-gray-700">Catatan</label>
                             <textarea id="catatan" name="catatan" rows="4"
                                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Masukkan catatan obat"></textarea>
+                                placeholder="Masukkan catatan"></textarea>
                         </div>
 
+                        <!-- Obat Selection -->
                         <div>
-                            <label for="biaya_obat" class="block text-sm font-medium text-gray-700">Biaya Obat</label>
-                            <input type="number" id="biaya_obat" name="biaya_obat"
-                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Masukkan biaya obat">
+                            <label for="obat" class="block text-sm font-medium text-gray-700">Obat</label>
+                            <select id="obat" name="obat[]" multiple
+                                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm">
+                                @foreach ($obats as $obat)
+                                <option value="{{ $obat->id }}">{{ $obat->nama }} ({{ $obat->kemasan }})</option>
+                                @endforeach
+                            </select>
+                            <p class="text-sm text-gray-500 mt-1">Tekan Ctrl (Cmd di Mac) untuk memilih lebih dari satu obat.</p>
                         </div>
 
+                        <!-- Submit Button -->
                         <div class="mt-6">
                             <button type="submit"
                                 class="w-full inline-flex justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-colors duration-200">
@@ -144,5 +153,6 @@
         </div>
     </div>
 </div>
+
 
 @endsection

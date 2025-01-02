@@ -53,12 +53,12 @@
                                         </span>
                                     </div>
                                     <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ ucfirst($activeSchedule->hari) }} ({{ $activeSchedule->schedule_date }})</div>
+                                        <div class="text-sm font-medium text-gray-900">{{ ucfirst($activeSchedule->hari) }}</div>
                                     </div>
                                 </div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $activeSchedule->start_time }} - {{ $activeSchedule->end_time }}
+                                {{ $activeSchedule->start_time->format('H:i') }} - {{ $activeSchedule->end_time->format('H:i') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
@@ -88,7 +88,7 @@
                             </td>
 
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                {{ $schedule->start_time }} - {{ $schedule->end_time }}
+                                {{ $schedule->start_time->format('H:i') }} - {{ $schedule->end_time->format('H:i') }}
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Inactive</span>

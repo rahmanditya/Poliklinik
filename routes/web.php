@@ -18,6 +18,8 @@ use App\Http\Controllers\Admin\AdminObatController;
 
 use App\Http\Controllers\Dokter\ScheduleController;
 
+use App\Models\Obat;
+
 use Illuminate\Support\Facades\Auth;
 
 // HOME
@@ -105,10 +107,18 @@ Route::middleware(['auth', RoleMiddleware::class])->group(function () {
     Route::get('/dokter/periksa/{pasien}/edit', [DokterController::class, 'editPeriksa'])->name('dokter.periksa.edit');
     Route::put('/dokter/periksa/{pasien}', [DokterController::class, 'updateStatus'])->name('dokter.periksa.update');
     Route::post('/dokter/periksa/{periksa}/detail', [DokterController::class, 'detailPeriksa'])->name('dokter.periksa.detail');
+
+    // OBAT PERIKSA
+    Route::get('api/obat/search', [DokterController::class, 'searchObat'])->name('dokter.obat.search');
+    Route::get('/api/obat/harga/{obat}', [DokterController::class, 'getObatPrice'])->name('dokter.obat.harga');
+
     // RIWAYAT
-    Route::get('/dokter/riwayat/', [DokterController::class, 'index'])->name('dokter.riwayat.index');
+    Route::get('/dokter/riwayat/', [DokterController::class, 'indexRiwayat'])->name('dokter.riwayat.index');
+    Route::get('/dokter/riwayat/{id}/detail', [DokterController::class, 'getDetail'])->name('dokter.riwayat.detail');
+
     // PROFIL
-    Route::get('/dokter/profil/', [DokterController::class, 'index'])->name('dokter.profil.index');
+    Route::get('/dokter/profil/', [DokterController::class, 'indexProfil'])->name('dokter.profil.index');
+    Route::put('/dokter/profil/update', [DokterController::class, 'updateProfil'])->name('dokter.profil.update');
 
     Route::post('/dokter/logout', [AuthController::class, 'logout'])->name('dokter.logout');
 });
@@ -116,11 +126,14 @@ Route::middleware(['auth', RoleMiddleware::class])->group(function () {
 // PASIEN
 
 Route::middleware(['auth', RoleMiddleware::class])->group(function () {
-    
+
     Route::get('/pasien/dashboard', [PasienController::class, 'dashboard'])->name('pasien.dashboard');
 
     Route::get('/pasien/poli', [PasienController::class, 'index'])->name('pasien.poli.index');
     Route::get('/pasien/poli/{poli}', [PasienController::class, 'show'])->name('pasien.poli.show');
+    Route::get('/pasien/poli/{id}/detail', [PasienController::class, 'showDetails'])->name('pasien.poli.detail');
+    // Route::get('/dokter/riwayat/{id}/detail', [DokterController::class, 'getDetail'])->name('dokter.riwayat.detail');
+
     Route::post('/pasien/poli/store', [PasienController::class, 'store'])->name('pasien.poli.store');
 
     Route::post('/pasien/logout', [AuthController::class, 'logout'])->name('pasien.logout');

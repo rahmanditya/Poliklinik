@@ -92,6 +92,7 @@
         const content = modal.querySelector('.modal-content');
 
         // Hide modal with animation
+        modal.classList.add('hidden');
         backdrop.classList.remove('show');
         content.classList.remove('show');
 

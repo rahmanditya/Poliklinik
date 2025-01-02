@@ -10,7 +10,15 @@
         <div class="flex items-center justify-between">
             <div class="text-white">
                 <h1 class="text-2xl font-bold mb-2">Selamat Datang, {{ $user->name ?? 'Tidak Diketahui' }}!</h1>
-                <p class="opacity-90">Jadwal pemeriksaan berikutnya: 15 Maret 2024, 09:30</p>
+                @forelse($user->pasien->daftarPoli ?? [] as $appointment)
+                <p class="opacity-90">Jadwal pemeriksaan berikutnya :
+                    {{ \Illuminate\Support\Str::ucfirst($appointment->schedule->hari ?? '-') }}, Jam :
+                    {{ \Carbon\Carbon::parse($appointment->schedule->start_time ?? now())->format('H:i') }} -
+                    {{ \Carbon\Carbon::parse($appointment->schedule->end_time ?? now())->format('H:i') }}
+                </p>
+                @empty
+                <p class="opacity-90">Tidak ada jadwal pemeriksaan.</p>
+                @endforelse
             </div>
             <div class="hidden md:flex items-center space-x-3">
                 <button class="bg-white text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors">
@@ -94,30 +102,20 @@
                         <div class="bg-blue-500 text-white rounded-lg p-3 mr-4">
                             <i class="fas fa-user-doctor text-xl"></i>
                         </div>
+                        @forelse($user->pasien->daftarPoli ?? [] as $appointment)
                         <div class="flex-1">
-                            <h4 class="font-semibold">Dr. Sarah Wilson</h4>
-                            <p class="text-sm text-gray-500">Pemeriksaan Rutin</p>
-                            <p class="text-xs text-blue-500 mt-1">15 Maret 2024 • 09:30 AM</p>
+                            <h4 class="font-semibold">{{ $appointment->dokter->name ?? '-' }}</h4>
+                            <p class="text-sm text-gray-500">{{ $appointment->dokter->poli->name ?? '-' }}</p>
+                            <p class="text-xs text-blue-500 mt-1">
+                                {{ \Illuminate\Support\Str::ucfirst($appointment->schedule->hari ?? '-') }},
+                                {{ \Carbon\Carbon::parse($appointment->schedule->start_time ?? now())->format('H:i') }} -
+                                {{ \Carbon\Carbon::parse($appointment->schedule->end_time ?? now())->format('H:i') }}
+                            </p>
                         </div>
-                        <div class="flex space-x-2">
-                            <button class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">
-                                Reschedule
-                            </button>
-                            <button class="px-3 py-1 text-sm bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                                Konfirmasi
-                            </button>
-                        </div>
-                    </div>
 
-                    <div class="flex items-center p-4 bg-gray-50 rounded-lg border border-gray-200">
-                        <div class="bg-purple-500 text-white rounded-lg p-3 mr-4">
-                            <i class="fas fa-tooth text-xl"></i>
-                        </div>
-                        <div class="flex-1">
-                            <h4 class="font-semibold">Dr. John Doe</h4>
-                            <p class="text-sm text-gray-500">Pemeriksaan Gigi</p>
-                            <p class="text-xs text-gray-500 mt-1">22 Maret 2024 • 14:00 PM</p>
-                        </div>
+                        @empty
+                        <p class="opacity-90">Tidak ada jadwal pemeriksaan.</p>
+                        @endforelse
                         <div class="flex space-x-2">
                             <button class="px-3 py-1 text-sm border border-gray-300 rounded-lg hover:bg-gray-50">
                                 Reschedule

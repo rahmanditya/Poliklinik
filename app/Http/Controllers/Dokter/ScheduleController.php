@@ -124,7 +124,7 @@ class ScheduleController extends Controller
     {
         $schedule = Schedule::findOrFail($id);
         if (!$schedule->is_active) {
-            return redirect()->route('schedules.index')->withErrors('Cannot edit past schedules.');
+            return redirect()->route('dokter.schedule.index')->withErrors('Cannot edit past schedules.');
         }
         return view('dokter.schedule.edit', compact('schedule'));
     }
