@@ -33,6 +33,7 @@ Admin :
 admin@mail.com
 123123123
 ```
+Untuk login dokter dan pasien, buat terlebih dahulu kedua datanya melalui admin atau pasien melalui registrasi.
 Dokter :
 ```bash
 Email sesuai dengan email yang ditambah admin
@@ -40,7 +41,7 @@ Email sesuai dengan email yang ditambah admin
 ```
 Pasien :
 ```bash
-Email sesuai email pendaftaran
+Email sesuai email pendaftaran/ ditambah admin
 123123123
 ```
 
